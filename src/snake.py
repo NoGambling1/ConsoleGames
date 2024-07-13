@@ -2,9 +2,14 @@ import random
 import time
 import os
 import sys
-import termios
-import tty
 import select
+
+# add msvcrt import for Windows
+if os.name == 'nt':
+    import msvcrt
+else:
+    import termios
+    import tty
 
 # const stuff
 WIDTH = 30
@@ -19,26 +24,7 @@ RED = "\033[91m"
 RESET = "\033[0m"
 
 class SnakeGame:
-    """
-    core game logic for the game
-    
-    attributes:
-        width (int): the width of the game grid.
-        height (int): the height of the game grid.
-        snake (List[List[int]]): current state of the snake, represented by coords in a list
-        direction (str): current direction the snake is moving 
-        fruit (List[int]): current pos of the fruit on the grid
-        score (int): current score
-        game_over (bool): game over bool to tell if game over (ofc)
-        
-    methods:
-        spawn_fruit(): generates a new fruit at a random location within the game grid
-        move_snake(): moves the snake according to its current direction and checks for collisions
-        draw(): respondible for terminal screen state
-    """
-
     def __init__(self):
-        """init a new instance of game."""
         self.width = WIDTH
         self.height = HEIGHT
         self.snake = [[4, 5], [3, 5], [2, 5]]
@@ -46,9 +32,9 @@ class SnakeGame:
         self.fruit = self.spawn_fruit()
         self.score = 0
         self.game_over = False
+        self.buffer = ""
 
     def spawn_fruit(self):
-        """generate a new fruit at a random location within the game grid."""
         while True:
             pos = [
                 random.randint(0, self.width - 1),
@@ -58,7 +44,6 @@ class SnakeGame:
                 return pos
 
     def move_snake(self):
-        """moves the snake according to its current direction and checks for collisions."""
         head = self.snake[0].copy()
         if self.direction == "UP":
             head[1] -= 1
@@ -88,16 +73,16 @@ class SnakeGame:
             self.snake.pop()
 
     def draw(self):
-        """clear terminal screen and draws current game state"""
-        os.system("cls" if os.name == "nt" else "clear")
+        self.buffer = ""
         terminal_width = os.get_terminal_size().columns
         left_padding = (terminal_width - (self.width * 2 + 2)) // 2
 
-        print("\n" * 2)  # automatic padding for all terminals
-        print(" " * left_padding + "┌" + "─" * (self.width * 2) + "┐")
+        self.buffer += "\033[H"  # Move cursor to home position
+        self.buffer += "\n" * 2  # automatic padding for all terminals
+        self.buffer += " " * left_padding + "┌" + "─" * (self.width * 2) + "┐\n"
 
         for y in range(self.height):
-            print(" " * left_padding + "│", end="")
+            self.buffer += " " * left_padding + "│"
             for x in range(self.width):
                 char = EMPTY_CHAR
                 if [x, y] == self.snake[0]:  # head
@@ -106,13 +91,13 @@ class SnakeGame:
                     char = GREEN + SNAKE_CHAR + RESET
                 elif [x, y] == self.fruit: 
                     char = RED + FRUIT_CHAR + RESET
-                print(char, end=" ")
-            print("│")
+                self.buffer += char + " "
+            self.buffer += "│\n"
 
-        print(" " * left_padding + "└" + "─" * (self.width * 2) + "┘")
+        self.buffer += " " * left_padding + "└" + "─" * (self.width * 2) + "┘\n"
 
         info = f"Score: {self.score}"
-        print(" " * ((terminal_width - len(info)) // 2) + info)
+        self.buffer += " " * ((terminal_width - len(info)) // 2) + info + "\n"
 
         controls = [
             "Controls:",
@@ -122,46 +107,34 @@ class SnakeGame:
             "D/→: Right",
             "Q: Quit",
         ]
-        print(
-            "\n"
-            + "\n".join(
-                " " * ((terminal_width - len(line)) // 2) + line for line in controls
-            )
+        self.buffer += "\n" + "\n".join(
+            " " * ((terminal_width - len(line)) // 2) + line for line in controls
         )
 
-def get_key(timeout=0.1):
-    """
-    wait for key press and returns the direction
-    
-    arguments:
-        timeout (float): the max time to wait for a key press IN SECONDS NOT MS
-    
-    returns:
-        str: direction corresponding to the pressed key or none if no key was pressed within the timeout period
-    """
-    if os.name == "nt":  # for windows based machines
-        import msvcrt
+        print(self.buffer)
 
+def get_key(timeout=0.1):
+    if os.name == "nt":  # for Windows
         start_time = time.time()
         while True:
             if msvcrt.kbhit():
                 key = msvcrt.getch()
-                if key == b"\xe0":  # arrow keys and whatever
+                if key == b'\xe0':  # Special keys (arrows, function keys, etc.)
                     key = msvcrt.getch()
-                    return {b"H": "UP", b"P": "DOWN", b"K": "LEFT", b"M": "RIGHT"}.get(key)
-                return key.decode("utf-8").upper()
+                    return {b'H': 'UP', b'P': 'DOWN', b'K': 'LEFT', b'M': 'RIGHT'}.get(key)
+                return key.decode('utf-8').upper()
             if time.time() - start_time > timeout:
                 return None
-    else:  # for unix systems (Linux, MacOS)
+    else:  # for Unix systems (Linux, macOS)
         old_settings = termios.tcgetattr(sys.stdin)
         try:
             tty.setcbreak(sys.stdin.fileno())
             rlist, _, _ = select.select([sys.stdin], [], [], timeout)
             if rlist:
                 key = sys.stdin.read(1)
-                if key == "\x1b":  # special key prefix
+                if key == '\x1b':  # Special key prefix
                     key += sys.stdin.read(2)
-                    return {"[A": "UP", "[B": "DOWN", "[D": "LEFT", "[C": "RIGHT"}.get(key[1:])
+                    return {'[A': 'UP', '[B': 'DOWN', '[D': 'LEFT', '[C': 'RIGHT'}.get(key[1:])
                 return key.upper()
             else:
                 return None
@@ -169,17 +142,18 @@ def get_key(timeout=0.1):
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 def play_game():
-    """
-    game loop
-    """
     game = SnakeGame()
     last_update = time.time()
     update_interval = 0.15
 
-    print("snake game")
-    print("use arrow keys or WASD to control the snake.")
-    print("press 'Q' to quit.")
-    input("press'Enter' to start...")
+    print("\033[?25l", end="")  # Hide cursor
+    print("\033[2J", end="")  # Clear screen
+    print("\033[H", end="")  # Move cursor to home position
+
+    print("Snake Game")
+    print("Use arrow keys or WASD to control the snake.")
+    print("Press 'Q' to quit.")
+    input("Press 'Enter' to start...")
 
     while not game.game_over:
         key = get_key()
@@ -201,9 +175,10 @@ def play_game():
             game.draw()
             last_update = current_time
 
-    print("game over")
-    print(f"final score: {game.score}")
-    input("press 'Enter' to return to the main menu...")
+    print("\033[?25h", end="")  # Show cursor
+    print("Game Over")
+    print(f"Final Score: {game.score}")
+    input("Press 'Enter' to return to the main menu...")
 
 if __name__ == "__main__":
     play_game()
