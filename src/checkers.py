@@ -25,7 +25,7 @@ def createBoard(board):
 def cordToNum(cordinate):
     cordArr = [*cordinate[::-1]]
     print(cordArr)
-    return ((cordArr[0]-1))
+    return ((int(cordArr[0])-1) * 8 + (ord(cordArr[1]-96)))
 
     
 
