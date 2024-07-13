@@ -1,10 +1,10 @@
 # experimental, will fix later
-
+# I can tell you worked real hard to code all of this
 import random
 import time
 import os
 import sys
-
+import keyboard
 # const things
 WIDTH = 10
 HEIGHT = 20
@@ -156,10 +156,10 @@ class TetrisGame:
         print(" " * ((terminal_width - len(info)) // 2) + info)
 
         # next piece (VERY EXPERIMENTAL)
-        print("\nnext piece:")
+        print("\n                                                        next piece:")
         next_piece_str = ["".join(self.next_piece.color + (BLOCK if cell else "  ") + RESET_COLOR for cell in row) for row in self.next_piece.shape]
         for row in next_piece_str:
-            print(" " * ((terminal_width - len(row)) // 2) + row)
+            print(" " * ((terminal_width - len(row)) // 2) + row )
 
         # display controls
         controls = [
@@ -211,7 +211,7 @@ def play_game():
     move_delay = 0.5
 
     print("tetris")
-    print("controls: A/←: left, D/→: right, S/↓: soft drop, W/↑: rotate, Space: hard drop, Q: quit")
+    print("CONTROLS: \nA/←: left, \nD/→: right, \nS/↓: soft drop, \nW/↑: rotate, \nSpace: hard drop, \nQ: quit")
     input("press 'Enter' to start...")
 
     while not game.game_over:
@@ -220,12 +220,18 @@ def play_game():
         key = get_input()
         if key in ('a', 'd'):
             game.move_piece(-1 if key == 'a' else 1, 0)
-        elif key == 's':
+        elif keyboard.is_pressed('left'): game.move_piece(-1, 0); time.sleep(0.1)
+        elif keyboard.is_pressed('right'): game.move_piece(1, 0); time.sleep(0.1)
+
+        elif key == 's' or keyboard.is_pressed('down'):
             game.move_piece(0, 1)
-        elif key == 'w':
+            time.sleep(0.1)
+        elif key == 'w' or keyboard.is_pressed('up'):
             game.rotate_piece()
+            time.sleep(0.1)
         elif key == ' ':
             game.drop_piece()
+            
         elif key == 'q':
             break
 

@@ -85,11 +85,11 @@ def play_game():
         to_num = cord_to_num(move_to)
         diff = to_num - from_num
 
+        piece = board[from_num]
 
         if piece != current_player:
             print("It's not your turn.")
             return
-        piece = board[from_num]
 
         if abs(diff) != 7 and abs(diff) != 9:  # 7 and 9 are the differences when capturing diagonally
             print("Move is not diagonal.")
@@ -159,22 +159,9 @@ def play_game():
                         return False
         return True
 
-    # Pseudocode for recalculating toHighlight after a legal move
-    def recalculate_toHighlight(current_player):
-        for i in range(len(board)):
-            if board[i] == "  ":  # Find the first empty square
-                return i  # Return the index of the first empty square
-        return None  # Return None if no empty squares are found
-
     # Main game loop
     count = 0
     while True:
-
-        # Inform the players whose turn it is
-        if count % 2 == 0:
-            print(Fore.YELLOW + "Player O's turn." + Style.RESET_ALL)
-        else:
-            print(Fore.YELLOW + "Player X's turn." + Style.RESET_ALL)
 
         if count % 2 == 0:
             current_player = "O"

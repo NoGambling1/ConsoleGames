@@ -25,7 +25,8 @@ def main():
     # <!> to add a new game, append a dictionary with 'name' and 'file' keys to this list <!>
     games = [
         {'name': 'tic-tac-toe', 'file': 'tic-tac-toe'},
-        {'name': 'checkers', 'file': 'checkers'}
+        {'name': 'checkers', 'file': 'checkers'},
+        {'name': 'tetris', 'file': 'tetris'}
     ]
 
     while True:
