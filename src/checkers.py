@@ -21,7 +21,9 @@ def play_game():
 
     current_player = "O"  # Start with player 'O'
 
-    def create_board(board, toHighlight):
+#------------------------------
+
+    def create_board(board, toHighlight): #Draws the board
         whatShouldIHighlight = toHighlight #25
         print("\n" + Fore.YELLOW + "welcome to checkers!" + Style.RESET_ALL)
         print(Fore.CYAN + "\ncurrent board:" + Style.RESET_ALL)
@@ -30,7 +32,7 @@ def play_game():
 
             for newCount in range(8):
                 spot = (count * 8) + newCount
-                if (int(spot) == int(whatShouldIHighlight)):
+                if (int(spot) == int(whatShouldIHighlight)): #highlights the last move made
 
                     if board[spot] == " O ":
                         print(
@@ -71,14 +73,14 @@ def play_game():
                         print("[" + board[spot] + "]", end=" ")
 
             print("\n  |  ")
-        print("   ----------------------------------------------")
+        print("   ----------------------------------------------") #Draws lettering
         print("      A     B    C     D     E    F    G     H")
 
-    def cord_to_num(coordinate):
+    def cord_to_num(coordinate): #Takes a position (A4) and finds it's place in the game array
         coord_arr = list(coordinate.lower())
         return (int(coord_arr[1]) - 1) * 8 + (ord(coord_arr[0]) - 97)
 
-    def add_move(move):
+    def add_move(move): #Makes a move and checks if its the players turn
         global toHighlight
         move_from, move_to = move.split("-")
         from_num = cord_to_num(move_from)
@@ -127,7 +129,7 @@ def play_game():
                 board[captured_pos + 8] = "  "
                 captured_pos += 16
 
-    def get_valid_move():
+    def get_valid_move(): #Takes the move as input
         while True:
             move = input(
                 Fore.GREEN
@@ -151,7 +153,7 @@ def play_game():
                 + Style.RESET_ALL
             )
 
-    def check_win_condition(player_piece):
+    def check_win_condition(player_piece): #Checks if there's a winner
         for i in range(len(board)):
             if board[i] == player_piece:
                 for j in range(i + 8, len(board), 8):
