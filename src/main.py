@@ -1,3 +1,5 @@
+import time
+
 import os
 
 def clear_screen():
@@ -11,6 +13,8 @@ def print_menu(games):
     for index, game in enumerate(games, 1):
         print(f"{index}. {game['name']}")
     print(f"{len(games) + 1}. Quit")
+
+# TODO: implement key queuing in the snake game
 
 def play_game(game_module):
     """import and play the selected game."""

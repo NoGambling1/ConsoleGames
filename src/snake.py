@@ -3,9 +3,10 @@ import time
 import os
 import sys
 import select
+import keyboard
 
 # add msvcrt import for Windows
-if os.name == 'nt':
+if os.name == "nt":
     import msvcrt
 else:
     import termios
@@ -22,6 +23,7 @@ EMPTY_CHAR = "·"
 GREEN = "\033[92m"
 RED = "\033[91m"
 RESET = "\033[0m"
+
 
 class SnakeGame:
     def __init__(self):
@@ -89,7 +91,7 @@ class SnakeGame:
                     char = GREEN + SNAKE_CHAR + RESET
                 elif [x, y] in self.snake:  # body
                     char = GREEN + SNAKE_CHAR + RESET
-                elif [x, y] == self.fruit: 
+                elif [x, y] == self.fruit:
                     char = RED + FRUIT_CHAR + RESET
                 self.buffer += char + " "
             self.buffer += "│\n"
@@ -113,38 +115,29 @@ class SnakeGame:
 
         print(self.buffer)
 
+
 def get_key(timeout=0.1):
-    if os.name == "nt":  # for Windows
-        start_time = time.time()
-        while True:
-            if msvcrt.kbhit():
-                key = msvcrt.getch()
-                if key == b'\xe0':  # Special keys (arrows, function keys, etc.)
-                    key = msvcrt.getch()
-                    return {b'H': 'UP', b'P': 'DOWN', b'K': 'LEFT', b'M': 'RIGHT'}.get(key)
-                return key.decode('utf-8').upper()
-            if time.time() - start_time > timeout:
-                return None
-    else:  # for Unix systems (Linux, macOS)
-        old_settings = termios.tcgetattr(sys.stdin)
-        try:
-            tty.setcbreak(sys.stdin.fileno())
-            rlist, _, _ = select.select([sys.stdin], [], [], timeout)
-            if rlist:
-                key = sys.stdin.read(1)
-                if key == '\x1b':  # Special key prefix
-                    key += sys.stdin.read(2)
-                    return {'[A': 'UP', '[B': 'DOWN', '[D': 'LEFT', '[C': 'RIGHT'}.get(key[1:])
-                return key.upper()
-            else:
-                return None
-        finally:
-            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+    start_time = time.time()
+    while True:
+        if keyboard.is_pressed("q"):  # Assuming 'Q' is uppercase
+            return "QUIT"
+        elif keyboard.is_pressed("w") or keyboard.is_pressed("up"):
+            return "UP"
+        elif keyboard.is_pressed("s") or keyboard.is_pressed("down"):
+            return "DOWN"
+        elif keyboard.is_pressed("a") or keyboard.is_pressed("left"):
+            return "LEFT"
+        elif keyboard.is_pressed("d") or keyboard.is_pressed("right"):
+            return "RIGHT"
+        if time.time() - start_time > timeout:
+            return None
+
 
 def play_game():
     game = SnakeGame()
     last_update = time.time()
     update_interval = 0.15
+    key_queue = []  # Initialize an empty list to hold queued keys
 
     print("\033[?25l", end="")  # Hide cursor
     print("\033[2J", end="")  # Clear screen
@@ -160,13 +153,20 @@ def play_game():
         if key == "Q":
             break
         elif key in ["UP", "DOWN", "LEFT", "RIGHT", "W", "A", "S", "D"]:
-            if key in ["W", "UP"] and game.direction != "DOWN":
+            key_queue.append(key)  # Add the key to the queue
+
+        # Process the queue every frame
+        while key_queue:
+            current_key = key_queue.pop(
+                0
+            )  # Remove and return the first item from the queue
+            if current_key in ["W", "UP"] and (game.direction != "DOWN"):
                 game.direction = "UP"
-            elif key in ["S", "DOWN"] and game.direction != "UP":
+            elif current_key in ["S", "DOWN"] and game.direction != "UP":
                 game.direction = "DOWN"
-            elif key in ["A", "LEFT"] and game.direction != "RIGHT":
+            elif current_key in ["A", "LEFT"] and game.direction != "RIGHT":
                 game.direction = "LEFT"
-            elif key in ["D", "RIGHT"] and game.direction != "LEFT":
+            elif current_key in ["D", "RIGHT"] and game.direction != "LEFT":
                 game.direction = "RIGHT"
 
         current_time = time.time()
@@ -178,7 +178,6 @@ def play_game():
     print("\033[?25h", end="")  # Show cursor
     print("Game Over")
     print(f"Final Score: {game.score}")
-    input("Press 'Enter' to return to the main menu...")
-
-if __name__ == "__main__":
-    play_game()
+    #input("Press 'Enter' to return to the main menu...")
+   # if __name__ == "__main__":
+    #play_game()

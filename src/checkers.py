@@ -79,7 +79,7 @@ def play_game():
     def cord_to_num(coordinate): #Takes a position (A4) and finds it's place in the game array
         coord_arr = list(coordinate.lower())
         return (int(coord_arr[1]) - 1) * 8 + (ord(coord_arr[0]) - 97)
-
+        global otherPiece
     def add_move(move): #Makes a move and checks if its the players turn
         global toHighlight
         move_from, move_to = move.split("-")
@@ -119,11 +119,17 @@ def play_game():
         board[from_num] = piece  # Keep the piece in place if the move is illegal
         board[to_num] = piece
         toHighlight = to_num
-
+        if piece == "X": otherPiece = "O"
+        else: otherPiece = "X"
+        
         # Capture logic
         if abs(from_num - to_num) == 14 or abs(from_num - to_num) == 18:  # Diagonal capture
             captured_pos = (from_num + to_num) // 2
             board[captured_pos] = "  "
+            if (board[abs(to_num - 7)].replace(" ","") == otherPiece): 
+                if(board[abs(to_num - 14)] == "  "): print("YOU CAN ATTACK AGAIN")
+            elif (board[abs(to_num - 9)].replace(" ","") == otherPiece):
+                if (board[abs(to_num - 18)] == "  "): print("YOU CAN ATTACK AGAIN")
         # Check for additional captures
             while captured_pos - 8 >= 0 and board[captured_pos - 8] == "X" and board[captured_pos - 16] == "O":
                 board[captured_pos - 8] = "  "
@@ -177,10 +183,11 @@ def play_game():
             current_player = "X"
         print(f"It is currently \'{current_player}\'s\' move.")
         if count == 0:
-            create_board(board, -1)  # Pass toHighlight to create_board
+            create_board(board, -1)  #Don't highlight anything if its the first move
         else:
             print(toHighlight)
             create_board(board, toHighlight)  # Pass toHighlight to create_board
+            print(board)
 
         move = get_valid_move()
         if move is None:
