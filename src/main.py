@@ -26,7 +26,8 @@ def main():
     games = [
         {'name': 'tic-tac-toe', 'file': 'tic-tac-toe'},
         {'name': 'checkers', 'file': 'checkers'},
-        {'name': 'tetris', 'file': 'tetris'}
+        {'name': 'tetris', 'file': 'tetris'},
+        {'name': 'snake', 'file': 'snake'}
     ]
 
     while True:
