@@ -5,6 +5,7 @@ import time
 import os
 import sys
 import keyboard
+
 # const things
 WIDTH = 10
 HEIGHT = 20
@@ -23,7 +24,7 @@ SHAPES = [
     [[0, 0, 1], [1, 1, 1]]
 ]
 
-# colors
+# Colors
 COLORS = [
     '\033[96m',  # cyan (I)
     '\033[93m',  # yellow (O)
@@ -38,21 +39,64 @@ RESET_COLOR = '\033[0m'
 GUIDE_COLOR = '\033[90m'  # dark gray
 
 class Tetromino:
+    """
+     otherwords, a tetris piece (yes, thats what they fucking call it)
+
+    attrib:
+        x (int): tetromino pos (x)
+        y (int): tetromino pos (y)
+        shape (List[List[int]]): shape of the tetromino
+        color (str): color
+
+    method:
+        move(dx, dy): move piece by delta
+        rotate(): 90 CW
+    """
+
     def __init__(self, x, y, shape, color):
+        """init new tetromino"""
         self.x = x
         self.y = y
         self.shape = shape
         self.color = color
 
     def move(self, dx, dy):
+        """move tetromino by given deltas"""
         self.x += dx
         self.y += dy
 
     def rotate(self):
+        """90 CW"""
         self.shape = list(zip(*self.shape[::-1]))
 
 class TetrisGame:
+    """
+    logic
+
+    attrib:
+        board (List[List[str]]): game board
+        score (int): score
+        level (int): level
+        lines_cleared (int): numLines cleared
+        current_piece (Tetromino): current falling piece
+        next_piece (Tetromino): next piece to fall
+        game_over (bool): game ended? y/n
+
+    Methods:
+        new_piece(): new random tetromino
+        valid_move(piece, dx=0, dy=0): valid move checker
+        place_piece(piece): place piece
+        remove_completed_lines(): rm completed liens and update socre
+        update_score(lines_cleared): ONLY update score
+        move_piece(dx, dy): move current piece along delta
+        rotate_piece(): rotate piece
+        drop_piece(): hard drop that shit
+        step(): piece down or place new piece
+        draw(): draw game state
+    """
+
     def __init__(self):
+        """init a new game"""
         self.board = [[EMPTY for _ in range(WIDTH)] for _ in range(HEIGHT)]
         self.score = 0
         self.level = 1
@@ -62,12 +106,14 @@ class TetrisGame:
         self.game_over = False
 
     def new_piece(self):
+        """generate new random tetromino"""
         shape_index = random.randint(0, len(SHAPES) - 1)
         shape = SHAPES[shape_index]
         color = COLORS[shape_index]
         return Tetromino(WIDTH // 2 - len(shape[0]) // 2, 0, shape, color)
 
     def valid_move(self, piece, dx=0, dy=0):
+        """movement validity checker"""
         for y, row in enumerate(piece.shape):
             for x, cell in enumerate(row):
                 if cell:
@@ -79,12 +125,14 @@ class TetrisGame:
         return True
 
     def place_piece(self, piece):
+        """place piece on board"""
         for y, row in enumerate(piece.shape):
             for x, cell in enumerate(row):
                 if cell:
                     self.board[piece.y + y][piece.x + x] = piece.color + BLOCK + RESET_COLOR
 
     def remove_completed_lines(self):
+        """rm completed lines and return the numLines cleared"""
         lines_to_remove = [i for i, row in enumerate(self.board) if all(cell != EMPTY for cell in row)]
         for line in lines_to_remove:
             del self.board[line]
@@ -92,27 +140,32 @@ class TetrisGame:
         return len(lines_to_remove)
 
     def update_score(self, lines_cleared):
+        """update score based on the numLines cleared"""
         self.lines_cleared += lines_cleared
         self.score += [0, 40, 100, 300, 1200][lines_cleared] * self.level
         self.level = self.lines_cleared // 10 + 1
 
     def move_piece(self, dx, dy):
+        """move the current piece if the move is returned OK"""
         if self.valid_move(self.current_piece, dx, dy):
             self.current_piece.move(dx, dy)
             return True
         return False
 
     def rotate_piece(self):
+        """rotate current piece if the rottation is returned OK"""
         original_shape = self.current_piece.shape
         self.current_piece.rotate()
         if not self.valid_move(self.current_piece):
             self.current_piece.shape = original_shape
 
     def drop_piece(self):
+        """hard drop that shit"""
         while self.move_piece(0, 1):
             pass
 
     def step(self):
+        """piece down or place new piece"""
         if not self.move_piece(0, 1):
             self.place_piece(self.current_piece)
             lines_cleared = self.remove_completed_lines()
@@ -123,9 +176,10 @@ class TetrisGame:
                 self.game_over = True
 
     def draw(self):
+        """draw game state"""
         os.system('cls' if os.name == 'nt' else 'clear')
         
-        # create temp board with the guidelines
+        #create temp board with the guidelines
         temp_board = [[GUIDE_COLOR + GUIDE + RESET_COLOR if x % 3 == 0 or y % 3 == 0 else EMPTY 
                        for x in range(WIDTH)] for y in range(HEIGHT)]
         
@@ -145,36 +199,45 @@ class TetrisGame:
         terminal_width = os.get_terminal_size().columns
         left_padding = (terminal_width - (WIDTH * 2 + 2)) // 2
 
-        print("\n" * 2)  #  top padding for fullscreen terminal support
+        print("\n" * 2)  # top padding for fullscreen terminal support
         print(" " * left_padding + "┌" + "─" * (WIDTH * 2) + "┐")
         for row in temp_board:
             print(" " * left_padding + "│" + "".join(cell + (RESET_COLOR + ' ' if cell != EMPTY else ' ') for cell in row) + "│")
         print(" " * left_padding + "└" + "─" * (WIDTH * 2) + "┘")
 
-        # game info display
-        info = f"score: {self.score}  lvl: {self.level}  lines: {self.lines_cleared}"
+        # info display
+        info = f"Score: {self.score}  Level: {self.level}  Lines: {self.lines_cleared}"
         print(" " * ((terminal_width - len(info)) // 2) + info)
 
-        # next piece (VERY EXPERIMENTAL)
-        print("\n                                                        next piece:")
+        # following piece display (terrible, need to rework)
+        print("\n" + " " * ((terminal_width - 11) // 2) + "Next piece:")
         next_piece_str = ["".join(self.next_piece.color + (BLOCK if cell else "  ") + RESET_COLOR for cell in row) for row in self.next_piece.shape]
         for row in next_piece_str:
-            print(" " * ((terminal_width - len(row)) // 2) + row )
+            print(" " * ((terminal_width - len(row)) // 2) + row)
 
         # display controls
         controls = [
-            "controls:",
-            "A/←: move left",
-            "D/→: move right",
-            "S/↓: soft drop",
-            "W/↑: rotate",
-            "Space: hard drop",
-            "Q: quit"
+            "Controls:",
+            "A/←: Move left",
+            "D/→: Move right",
+            "S/↓: Soft drop",
+            "W/↑: Rotate",
+            "Space: Hard drop",
+            "Q: Quit"
         ]
         print("\n" + "\n".join(" " * ((terminal_width - len(line)) // 2) + line for line in controls))
 
 def get_input(timeout=0.1):
-    if os.name == 'nt':  # windows machines
+    """
+    wait for key press and return action
+
+    args:
+        timeout (float): the max time to wait for a key press in seconds
+
+    returns:
+        str: the action mapped to the key or none if no key was pressed within the timeout period
+    """
+    if os.name == 'nt':  # window's computers
         import msvcrt
         start_time = time.time()
         while True:
@@ -206,12 +269,13 @@ def get_input(timeout=0.1):
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 def play_game():
+    """game loop"""
     game = TetrisGame()
     last_move_time = time.time()
     move_delay = 0.5
 
-    print("tetris")
-    print("CONTROLS: \nA/←: left, \nD/→: right, \nS/↓: soft drop, \nW/↑: rotate, \nSpace: hard drop, \nQ: quit")
+    print("tetris for dummies")
+    print("CONTROLS: \nA/←: Left, \nD/→: Right, \nS/↓: Soft drop, \nW/↑: Rotate, \nSpace: Hard drop, \nQ: Quit")
     input("press 'Enter' to start...")
 
     while not game.game_over:
@@ -222,7 +286,6 @@ def play_game():
             game.move_piece(-1 if key == 'a' else 1, 0)
         elif keyboard.is_pressed('left'): game.move_piece(-1, 0); time.sleep(0.1)
         elif keyboard.is_pressed('right'): game.move_piece(1, 0); time.sleep(0.1)
-
         elif key == 's' or keyboard.is_pressed('down'):
             game.move_piece(0, 1)
             time.sleep(0.1)
@@ -231,7 +294,6 @@ def play_game():
             time.sleep(0.1)
         elif key == ' ':
             game.drop_piece()
-            
         elif key == 'q':
             break
 
