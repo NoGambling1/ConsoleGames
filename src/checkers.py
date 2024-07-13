@@ -8,9 +8,11 @@ board = [" O "] * 16 + ["   "] * 32 + [" X "] * 16
 def createBoard(board):
     boardToUse = board
     for count in range(8):
+        print(Fore.CYAN + "|",end="  " + Style.RESET_ALL)
         for newCount in range(8):
+            
             spot = (count* 8) + newCount
             print("[" + board[spot] + "]",end=" ")
-        print("\n")
+        print("\n|  ")
 
-createBoard(board)
+createBoard(board)  
