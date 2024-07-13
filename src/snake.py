@@ -4,7 +4,7 @@ import os
 import sys
 import select
 
-# Add msvcrt import for Windows
+# add msvcrt import for Windows
 if os.name == 'nt':
     import msvcrt
 else:
