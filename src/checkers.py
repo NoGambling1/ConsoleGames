@@ -96,7 +96,7 @@ def play_game():
             print("It's not your turn.")
             return
 
-        if abs(diff) != 7 and abs(diff) != 9:  # 7 and 9 are the differences when capturing diagonally
+        if (abs(diff) != 7 and abs(diff) != 9) and (abs(diff) != 18 and abs(diff) != 14):   # 7 and 9 are the differences when capturing diagonally
             print("Move is not diagonal.")
             return
 
@@ -121,7 +121,7 @@ def play_game():
         toHighlight = to_num
 
         # Capture logic
-        if abs(from_num - to_num) == 7:  # Diagonal capture
+        if abs(from_num - to_num) == 14 or abs(from_num - to_num) == 18:  # Diagonal capture
             captured_pos = (from_num + to_num) // 2
             board[captured_pos] = "  "
         # Check for additional captures
