@@ -4,13 +4,12 @@ from colorama import Style
 colorama_init()
 
 board = [" O "] * 16 + [""] * 32 + [" X "] * 16
-print(board)
+
 def createBoard(board):
     boardToUse = board
-    for count in range(8):
+    for count in range(1, 9):
         for newCount in range(8):
-            print()
-
+            print(board[count * newCount],end=" ")
+        #print("\n")
 
 createBoard(board)
-# grr grr
