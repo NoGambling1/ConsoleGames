@@ -5,6 +5,8 @@ colorama_init()
 
 board = [" O ", "  "] * 4 + ["  ", " O "] * 4 + [" O ", "  "] * 4 + ["  "] * 16 + ["  ", " X "] * 4 + [" X ", "  "] * 4 + ["  ", " X "] * 4
 
+# --------------------------------------------------------------
+
 def createBoard(board):
     boardToUse = board
     for count in range(8):
@@ -17,4 +19,23 @@ def createBoard(board):
         print("\n  |  ")
     print("   ----------------------------------------------")
     print("      A     B    C     D     E    F    G     H")
-createBoard(board)  
+
+# --------------------------------------------------------------
+
+def cordToNum(cordinate):
+    cordArr = [*cordinate[::-1]]
+    print(cordArr)
+    return ((cordArr[0]-1))
+
+    
+
+
+def addMove(move):
+    moveFrom = move.split("-")[0]
+    moveTo = move.split("-",1)[1]
+
+    
+    
+createBoard(board)
+addMove("A5-B3")
+cordToNum("A5")
