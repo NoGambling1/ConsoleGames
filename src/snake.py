@@ -2,9 +2,14 @@ import random
 import time
 import os
 import sys
-import termios
-import tty
 import select
+
+# add an if statement to see if windows or not, if not then use unix
+if os.name == 'nt':
+    import msvcrt
+else:
+    import termios
+    import tty
 
 # const stuff
 WIDTH = 30
@@ -34,7 +39,7 @@ class SnakeGame:
     methods:
         spawn_fruit(): generates a new fruit at a random location within the game grid
         move_snake(): moves the snake according to its current direction and checks for collisions
-        draw(): respondible for terminal screen state
+        draw(): responsible for terminal screen state
     """
 
     def __init__(self):
@@ -89,7 +94,7 @@ class SnakeGame:
 
     def draw(self):
         """clear terminal screen and draws current game state"""
-        os.system("cls" if os.name == "nt" else "clear")
+        os.system('cls' if os.name == 'nt' else 'clear')
         terminal_width = os.get_terminal_size().columns
         left_padding = (terminal_width - (self.width * 2 + 2)) // 2
 
@@ -139,29 +144,27 @@ def get_key(timeout=0.1):
     returns:
         str: direction corresponding to the pressed key or none if no key was pressed within the timeout period
     """
-    if os.name == "nt":  # for windows based machines
-        import msvcrt
-
+    if os.name == "nt":  # for Windows
         start_time = time.time()
         while True:
             if msvcrt.kbhit():
                 key = msvcrt.getch()
-                if key == b"\xe0":  # arrow keys and whatever
+                if key == b'\xe0':  # special keys (arrows, function keys, etc.)
                     key = msvcrt.getch()
-                    return {b"H": "UP", b"P": "DOWN", b"K": "LEFT", b"M": "RIGHT"}.get(key)
-                return key.decode("utf-8").upper()
+                    return {b'H': 'UP', b'P': 'DOWN', b'K': 'LEFT', b'M': 'RIGHT'}.get(key)
+                return key.decode('utf-8').upper()
             if time.time() - start_time > timeout:
                 return None
-    else:  # for unix systems (Linux, MacOS)
+    else:  # for Unix systems (Linux, macOS)
         old_settings = termios.tcgetattr(sys.stdin)
         try:
             tty.setcbreak(sys.stdin.fileno())
             rlist, _, _ = select.select([sys.stdin], [], [], timeout)
             if rlist:
                 key = sys.stdin.read(1)
-                if key == "\x1b":  # special key prefix
+                if key == '\x1b':  # Special key prefix
                     key += sys.stdin.read(2)
-                    return {"[A": "UP", "[B": "DOWN", "[D": "LEFT", "[C": "RIGHT"}.get(key[1:])
+                    return {'[A': 'UP', '[B': 'DOWN', '[D': 'LEFT', '[C': 'RIGHT'}.get(key[1:])
                 return key.upper()
             else:
                 return None
@@ -176,10 +179,10 @@ def play_game():
     last_update = time.time()
     update_interval = 0.15
 
-    print("snake game")
-    print("use arrow keys or WASD to control the snake.")
-    print("press 'Q' to quit.")
-    input("press'Enter' to start...")
+    print("Snake Game")
+    print("Use arrow keys or WASD to control the snake.")
+    print("Press 'Q' to quit.")
+    input("Press 'Enter' to start...")
 
     while not game.game_over:
         key = get_key()
@@ -201,9 +204,9 @@ def play_game():
             game.draw()
             last_update = current_time
 
-    print("game over")
-    print(f"final score: {game.score}")
-    input("press 'Enter' to return to the main menu...")
+    print("Game Over")
+    print(f"Final Score: {game.score}")
+    input("Press 'Enter' to return to the main menu...")
 
 if __name__ == "__main__":
     play_game()
