@@ -23,8 +23,8 @@ def play_game():
 
 #------------------------------
 
-    def create_board(board, toHighlight): #Draws the board
-        whatShouldIHighlight = toHighlight #25
+    def create_board(board, hee): #Draws the board
+        whatShouldIHighlight = hee #25
         print("\n" + Fore.YELLOW + "welcome to checkers!" + Style.RESET_ALL)
         print(Fore.CYAN + "\ncurrent board:" + Style.RESET_ALL)
         for count in range(8):
@@ -56,7 +56,7 @@ def play_game():
                         )
 
                     else:
-                        print("[" + board[spot] + "]", end=" " + Back.CYAN)
+                        print(Back.CYAN + "[" + board[spot] + "]" + Back.RESET, end=" " )
                 else:
                     if board[spot] == " O ":
                         print(
@@ -86,10 +86,13 @@ def play_game():
         from_num = cord_to_num(move_from)
         to_num = cord_to_num(move_to)
         diff = to_num - from_num
+        print(from_num, to_num)
+        toHighlight = to_num
 
         piece = board[from_num]
-
-        if piece != current_player:
+        print("__" + piece + "__")
+        
+        if piece.replace(" ","") != current_player:
             print("It's not your turn.")
             return
 
@@ -98,12 +101,12 @@ def play_game():
             return
 
         # Check if the piece is a king and moving backwards
-        if piece == "K" and to_num < from_num:
+        if piece == "K" and to_num == from_num - 8:
             print("Cannot move backwards.")
             return
 
         # Check if the piece is an 'O' and moving forwards
-        if piece == "O" and to_num > from_num:
+        if piece == "O" and to_num == from_num + 8:
             print("Cannot move forwards.")
             return
 
@@ -129,6 +132,8 @@ def play_game():
                 board[captured_pos + 8] = "  "
                 captured_pos += 16
 
+        board[from_num] = "  "
+
     def get_valid_move(): #Takes the move as input
         while True:
             move = input(
@@ -147,6 +152,7 @@ def play_game():
                 and move[4].isdigit()
             ):
                 return move
+                
             print(
                 Fore.RED
                 + "Invalid move format. Please use the format 'A3-B4' to play a move."
@@ -169,10 +175,11 @@ def play_game():
             current_player = "O"
         else:
             current_player = "X"
-
+        print(f"It is currently \'{current_player}\'s\' move.")
         if count == 0:
-            create_board(board, toHighlight)  # Pass toHighlight to create_board
+            create_board(board, -1)  # Pass toHighlight to create_board
         else:
+            print(toHighlight)
             create_board(board, toHighlight)  # Pass toHighlight to create_board
 
         move = get_valid_move()
