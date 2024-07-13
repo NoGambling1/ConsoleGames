@@ -40,7 +40,7 @@ def play_game():
         ]
         for combo in winning_combinations:
             if all(game_array[i] == user for i in combo):
-                return f"user ({'1' if user == user1 else '2'}) ({user}) won the game!"
+                return f"User {'1' if user == user1 else '2'} ({user}) won the game!"
         return None
 
     def get_available_spots():
@@ -96,13 +96,13 @@ def play_game():
     sleep(1)
 
     while True:
-        user1 = input("is user 1 'x' or '-'? ").lower()
+        user1 = input("Is User 1 'x' or '-'? ").lower()
         if user1 in ["x", "-"]:
             user2 = "-" if user1 == "x" else "x"
             break
         print("thats not a valid input, please try again.")
 
-    print(f"User 1 is playing {user1}, while User 2 is playing {user2}")
+    print(f"User 1 is playing \"{user1}\", while User 2 is playing \"{user2}\"")
     sleep(0.5)
 
     for turn in range(9):
@@ -119,7 +119,7 @@ def play_game():
         result = check_win(current_user)
         if result:
             build_full_board()
-            print(Fore.MAGENTA + result)
+            print(Fore.GREEN + result + Fore.RESET)
             break
 
         if turn == 8:  # draw

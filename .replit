@@ -1,8 +1,8 @@
 modules = ["python-3.12"]
 run = "cd src && python main.py"
 
-[nix]
+[nix] # type: ignore
 channel = "stable-24_05"
 
-[deployment]
+[deployment] # type: ignore
 run = ["sh", "-c", "python main.py"]
