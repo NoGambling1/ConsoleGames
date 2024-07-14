@@ -48,8 +48,10 @@ def randomizeBoard(difficulty):  # Diff 1-3,  1=40%, 2=32%, 3=25%
         randie = random.randrange(100) < given
         if randie:
             attempts = 0
+            
             max_attempts = 100  # Limit to prevent infinite loops
             while attempts < max_attempts:
+                #print(i)
                 board[i] = f" {random.randint(1, 4)} "
                 if checkSpot(i):
                     break  # Valid spot found, exit the loop
@@ -74,6 +76,43 @@ def checkSpot(spot):
     for i in range(spot % 4, 16, 4):
         if i != spot and board[i].strip() == current_number:
             return False
+        
+    numArr = []
+    Q1 = [0, 1, 4, 5]
+    Q2 = [2, 3, 6, 7]
+    Q3 = [8, 9, 12, 13]
+    Q4 = [10, 11, 14, 15]
+    if(spot in Q1): # Quadrant 1
+        for count in range (4):
+            numArr.append(board[Q1[count]].replace(" ",""))
+            print(numArr)
+        for count in range(4):
+            if (numArr.count(f"{count+1}") > 1):
+                return False
+        
+    elif (spot in Q2): #Quadrant 2
+        for count in range (4):
+            numArr.append(board[Q2[count]].replace(" ",""))
+            print(numArr)
+        for count in range(4):
+            if (numArr.count(f"{count+1}") > 1):
+                return False
+        
+    elif (spot in Q3): #Quadrant 3
+        for count in range (4):
+            numArr.append(board[Q3[count]].replace(" ",""))
+            print(numArr)
+        for count in range(4):
+            if (numArr.count(f"{count+1}") > 1):
+                return False
+        
+    elif (spot in Q4): #Quadrant 4
+        for count in range (4):
+            numArr.append(board[Q4[count]].replace(" ",""))
+            print(numArr)
+        for count in range(4):
+            if (numArr.count(f"{count+1}") > 1):
+                return False
 
     # If no duplicates are found, return True
     return True
