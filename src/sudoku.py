@@ -43,13 +43,22 @@ def randomizeBoard(difficulty): #Diff 1-3,  1=40%, 2=32%, 3=25%
             board[i] = (" " + str(random.randint(1, 4)) + " ")
     return board
 
-print(board[all()])
+def has_duplicates(array):
+    seen = set()
+    for element in array:
+        if element in seen:
+            return True
+        seen.add(element)
+    return False
+
 def checkSpot(spot)
     spot = spot
     #if (int(spot) - 4 == spot or int(spot) + 4 == spot)
     if spot < 4:
+        smallerArr = board[range(1, 5)]
         if board[spot+4] != spot and board[spot+8] != spot and board[spot+12] != spot:
-            print("hi")
+            if has_duplicates(smallerArr): return False
+            else: return True
     elif spot < 8:
     elif spot < 12:
     else:
