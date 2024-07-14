@@ -330,7 +330,7 @@ class ChessGame:
             else:
                 print()
 
-def main():
+def play_game():
     game = ChessGame()
     while True:
         game.display()
@@ -365,6 +365,7 @@ def main():
             else:
                 print("Invalid move. Please try again.")
                 time.sleep(1)
-                
+    input("Press 'Enter' to return to the main menu...")
+
 if __name__ == "__main__":
-    main()
+    play_game()
