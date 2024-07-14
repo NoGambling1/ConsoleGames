@@ -73,8 +73,7 @@ def main():
         {'name': 'Checkers', 'file': 'checkers'},
         {'name': 'Tetris', 'file': 'tetris'},
         {'name': 'Snake', 'file': 'snake'},
-        {'name': 'sudoku', 'file': 'sudoku'},
-        {'name': 'chess', 'file': 'chess'}
+        {'name': 'sudoku', 'file': 'sudoku'}
     ]
 
     while True:
