@@ -15,6 +15,8 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
+# ------------------------------------------------------------------------------
+
 def createBoard(board):
     for a in range(4):
         if a == 2:
@@ -32,6 +34,8 @@ def createBoard(board):
         print("")
     print("---------------------")
 
+# ------------------------------------------------------------------------------
+
 def randomizeBoard(difficulty): #Diff 1-3,  1=40%, 2=32%, 3=25%
     if difficulty == 1: given = 40
     elif difficulty == 2: given = 32
@@ -40,8 +44,14 @@ def randomizeBoard(difficulty): #Diff 1-3,  1=40%, 2=32%, 3=25%
     for i in range(16):
         randie = random.randrange(100) < given
         if randie:
-            board[i] = (" " + str(random.randint(1, 4)) + " ")
+            while checkSpot(i) == False:
+                board[i] = (" " + str(random.randint(1, 4)) + " ")
+            
+            
+
     return board
+
+# ------------------------------------------------------------------------------
 
 def has_duplicates(array):
     seen = set()
@@ -51,16 +61,36 @@ def has_duplicates(array):
         seen.add(element)
     return False
 
-def checkSpot(spot)
+# ------------------------------------------------------------------------------
+
+def checkSpot(spot):
     spot = spot
     #if (int(spot) - 4 == spot or int(spot) + 4 == spot)
     if spot < 4:
-        smallerArr = board[range(1, 5)]
         if board[spot+4] != spot and board[spot+8] != spot and board[spot+12] != spot:
+            smallerArr = board[0] + board[1] + board[2] + board[3]
             if has_duplicates(smallerArr): return False
             else: return True
-    elif spot < 8:
+        else: return False
+    elif spot < 8:  
+        if board[spot+4] != spot and board[spot+8] != spot and board[spot-4] != spot:
+            smallerArr = board[4] + board[5] + board[6] + board[7]
+            if has_duplicates(smallerArr): return False
+            else: return True
+        else: return False
     elif spot < 12:
+        if board[spot+4] != spot and board[spot-8] != spot and board[spot-4] != spot:
+            smallerArr = board[8] + board[9] + board[10] + board[11]
+            if has_duplicates(smallerArr): return False
+            else: return True
+        else: return False
     else:
+        if board[spot-8] != spot and board[spot-12] != spot and board[spot-4] != spot:
+            smallerArr = board[12] + board[13] + board[14] + board[15]
+            if has_duplicates(smallerArr): return False
+            else: return True
+        else: return False
+
+# ------------------------------------------------------------------------------
 print(randomizeBoard(1))
 createBoard(randomizeBoard(1))
