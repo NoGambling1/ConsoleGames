@@ -28,7 +28,7 @@ def print_animated_title():
         time.sleep(0.1)
 
 def print_main_menu():
-    """Print the main menu options."""
+    """Print the main menu options.""" # update
     print("\nMAIN MENU:")
     print("1. View Games")
     print("2. View Credits")
