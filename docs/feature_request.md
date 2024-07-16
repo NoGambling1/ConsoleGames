@@ -1,20 +1,40 @@
 ---
-name: Feature request
-about: suggest a game/feature for this project
-title: "[FEATURE REQUEST]"
-labels: ''
+name: bug report
+about: create a report to help us improve
+title: "[BUG]"
+labels: bug
 assignees: orangejuiceplz
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-a clear and concise description of what the problem is. for example, i hate it when [...] happens
+**Describe the bug**
+a clear and concise description of what the bug is.
 
-**Describe the solution you'd like**
-what do you want? be clear
+**To Reproduce**
+steps to reproduce the behavior:
+1. go here '...'
+2. click on '....'
+3. scroll down to '....'
+4. see error
 
-**Describe alternatives you've considered**
-any alternatives to your main solution? be clear
+**Expected behavior**
+give a clear, thought out description of what you thought was going to happen before the error happens
+
+**Screenshots**
+if possible, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+(if you are on **LINUX** please add your distro as well)
+ - OS: [e.g. Windows 10] 
+ - browser [e.g. chrome, safari]
+ - version [e.g. 22]
+
+**Smartphone (please complete the following information):**
+ - device: [e.g. iPhone15 Pro]
+ - OS: [e.g. iOS18.0 Beta 3]
+ - browser [e.g. stock browser, safari]
+ - version [e.g. 22]
 
 **Additional context**
-any other additional context and screenshots
+
+more context here
