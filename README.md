@@ -14,6 +14,7 @@ we have a variety of planned and already developed games
   - Sudoku
   - Snake
   - Chess
+  - Conway's Game of Life
   - More to be added
 
 ## Getting started
