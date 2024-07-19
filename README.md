@@ -17,6 +17,12 @@ we have a variety of planned and already developed games
   - Conway's Game of Life
   - More to be added
 
+## Documentation
+
+### Docs info
+
+documentation is still in progress. all of the docs that are currently added ar located in the `docs/` directory
+
 ## Getting started
 
 wanna play them? pretty simple. you can use the repl link to play them via replit, or you can clone the repo and run `main.py`.
