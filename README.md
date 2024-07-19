@@ -57,4 +57,4 @@ ConsoleGames is licensed under the MIT License. See the  [LICENSE](https://githu
 
 ## Contributions
 
-any contributions are welcome, just refer to the contributors file.
+any contributions are welcome, just refer to the [contributor's file](https://github.com/NoGambling1/ConsoleGames/blob/main/docs/CONTRIBUTING.md)
