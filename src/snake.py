@@ -3,29 +3,22 @@ import time
 import os
 import sys
 import select
-import keyboard
 
-# add msvcrt import for Windows
-if os.name == "nt":
-    import msvcrt
-else:
-    import termios
-    import tty
-
-# const stuff
+# const
 WIDTH = 30
 HEIGHT = 20
 SNAKE_CHAR = "■"
 FRUIT_CHAR = "●"
 EMPTY_CHAR = "·"
 
-# color
+# colour
 GREEN = "\033[92m"
 RED = "\033[91m"
 RESET = "\033[0m"
 
 
 class SnakeGame:
+
     def __init__(self):
         self.width = WIDTH
         self.height = HEIGHT
@@ -56,13 +49,8 @@ class SnakeGame:
         elif self.direction == "RIGHT":
             head[0] += 1
 
-        if (
-            head[0] < 0
-            or head[0] >= self.width
-            or head[1] < 0
-            or head[1] >= self.height
-            or head in self.snake
-        ):
+        if (head[0] < 0 or head[0] >= self.width or head[1] < 0
+                or head[1] >= self.height or head in self.snake):
             self.game_over = True
             return
 
@@ -81,7 +69,8 @@ class SnakeGame:
 
         self.buffer += "\033[H"  # Move cursor to home position
         self.buffer += "\n" * 2  # automatic padding for all terminals
-        self.buffer += " " * left_padding + "┌" + "─" * (self.width * 2) + "┐\n"
+        self.buffer += " " * left_padding + "┌" + "─" * (self.width *
+                                                         2) + "┐\n"
 
         for y in range(self.height):
             self.buffer += " " * left_padding + "│"
@@ -96,7 +85,8 @@ class SnakeGame:
                 self.buffer += char + " "
             self.buffer += "│\n"
 
-        self.buffer += " " * left_padding + "└" + "─" * (self.width * 2) + "┘\n"
+        self.buffer += " " * left_padding + "└" + "─" * (self.width *
+                                                         2) + "┘\n"
 
         info = f"Score: {self.score}"
         self.buffer += " " * ((terminal_width - len(info)) // 2) + info + "\n"
@@ -109,65 +99,60 @@ class SnakeGame:
             "D/→: Right",
             "Q: Quit",
         ]
-        self.buffer += "\n" + "\n".join(
-            " " * ((terminal_width - len(line)) // 2) + line for line in controls
-        )
+        self.buffer += "\n" + "\n".join(" " * (
+            (terminal_width - len(line)) // 2) + line for line in controls)
 
         print(self.buffer)
 
 
-def get_key(timeout=0.1):
-    start_time = time.time()
-    while True:
-        if keyboard.is_pressed("q"):  # Assuming 'Q' is uppercase
-            return "QUIT"
-        elif keyboard.is_pressed("w") or keyboard.is_pressed("up"):
-            return "UP"
-        elif keyboard.is_pressed("s") or keyboard.is_pressed("down"):
-            return "DOWN"
-        elif keyboard.is_pressed("a") or keyboard.is_pressed("left"):
-            return "LEFT"
-        elif keyboard.is_pressed("d") or keyboard.is_pressed("right"):
-            return "RIGHT"
-        if time.time() - start_time > timeout:
-            return None
+def get_key():
+    if os.name == 'nt':  # for Windows
+        import msvcrt
+        return msvcrt.getch().decode('utf-8').lower()
+    else:  # for Unix systems
+        import termios
+        import tty
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch.lower()
 
 
 def play_game():
     game = SnakeGame()
     last_update = time.time()
     update_interval = 0.15
-    key_queue = []  # Initialize an empty list to hold queued keys
 
-    print("\033[?25l", end="")  # Hide cursor
-    print("\033[2J", end="")  # Clear screen
-    print("\033[H", end="")  # Move cursor to home position
+    print("\033[?25l", end="")  # hide cursor
+    print("\033[2J", end="")  # clr screen
+    print("\033[H", end="")  # move cursor to home position
 
     print("Snake Game")
-    print("Use arrow keys or WASD to control the snake.")
-    print("Press 'Q' to quit.")
+    print("use arrow keys or WASD to control the snake")
+    print("press 'Q' to quit.")
     input("Press 'Enter' to start...")
 
     while not game.game_over:
-        key = get_key()
-        if key == "Q":
-            break
-        elif key in ["UP", "DOWN", "LEFT", "RIGHT", "W", "A", "S", "D"]:
-            key_queue.append(key)  # Add the key to the queue
-
-        # Process the queue every frame
-        while key_queue:
-            current_key = key_queue.pop(
-                0
-            )  # Remove and return the first item from the queue
-            if current_key in ["W", "UP"] and (game.direction != "DOWN"):
-                game.direction = "UP"
-            elif current_key in ["S", "DOWN"] and game.direction != "UP":
-                game.direction = "DOWN"
-            elif current_key in ["A", "LEFT"] and game.direction != "RIGHT":
-                game.direction = "LEFT"
-            elif current_key in ["D", "RIGHT"] and game.direction != "LEFT":
-                game.direction = "RIGHT"
+        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+            key = get_key()
+            if key == 'q':
+                break
+            elif key in ['w', '\x1b[A']:  # 'w' or up arrow
+                if game.direction != "DOWN":
+                    game.direction = "UP"
+            elif key in ['s', '\x1b[B']:  # 's' or down arrow
+                if game.direction != "UP":
+                    game.direction = "DOWN"
+            elif key in ['a', '\x1b[D']:  # 'a' or left arrow
+                if game.direction != "RIGHT":
+                    game.direction = "LEFT"
+            elif key in ['d', '\x1b[C']:  # 'd' or right arrow
+                if game.direction != "LEFT":
+                    game.direction = "RIGHT"
 
         current_time = time.time()
         if current_time - last_update > update_interval:
@@ -175,9 +160,10 @@ def play_game():
             game.draw()
             last_update = current_time
 
-    print("\033[?25h", end="")  # Show cursor
+    print("\033[?25h", end="")  # show cursor
     print("Game Over")
     print(f"Final Score: {game.score}")
-    #input("Press 'Enter' to return to the main menu...")
-   # if __name__ == "__main__":
-    #play_game()
+
+
+if __name__ == "__main__":
+    play_game()
