@@ -2,6 +2,7 @@ import random
 import time
 import os
 import sys
+import select
 
 # const
 WIDTH = 30
@@ -15,7 +16,9 @@ GREEN = "\033[92m"
 RED = "\033[91m"
 RESET = "\033[0m"
 
+
 class SnakeGame:
+
     def __init__(self):
         self.width = WIDTH
         self.height = HEIGHT
@@ -46,13 +49,8 @@ class SnakeGame:
         elif self.direction == "RIGHT":
             head[0] += 1
 
-        if (
-            head[0] < 0
-            or head[0] >= self.width
-            or head[1] < 0
-            or head[1] >= self.height
-            or head in self.snake
-        ):
+        if (head[0] < 0 or head[0] >= self.width or head[1] < 0
+                or head[1] >= self.height or head in self.snake):
             self.game_over = True
             return
 
@@ -71,7 +69,8 @@ class SnakeGame:
 
         self.buffer += "\033[H"  # Move cursor to home position
         self.buffer += "\n" * 2  # automatic padding for all terminals
-        self.buffer += " " * left_padding + "┌" + "─" * (self.width * 2) + "┐\n"
+        self.buffer += " " * left_padding + "┌" + "─" * (self.width *
+                                                         2) + "┐\n"
 
         for y in range(self.height):
             self.buffer += " " * left_padding + "│"
@@ -86,7 +85,8 @@ class SnakeGame:
                 self.buffer += char + " "
             self.buffer += "│\n"
 
-        self.buffer += " " * left_padding + "└" + "─" * (self.width * 2) + "┘\n"
+        self.buffer += " " * left_padding + "└" + "─" * (self.width *
+                                                         2) + "┘\n"
 
         info = f"Score: {self.score}"
         self.buffer += " " * ((terminal_width - len(info)) // 2) + info + "\n"
@@ -99,11 +99,11 @@ class SnakeGame:
             "D/→: Right",
             "Q: Quit",
         ]
-        self.buffer += "\n" + "\n".join(
-            " " * ((terminal_width - len(line)) // 2) + line for line in controls
-        )
+        self.buffer += "\n" + "\n".join(" " * (
+            (terminal_width - len(line)) // 2) + line for line in controls)
 
         print(self.buffer)
+
 
 def get_key():
     if os.name == 'nt':  # for Windows
@@ -120,6 +120,7 @@ def get_key():
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch.lower()
+
 
 def play_game():
     game = SnakeGame()
@@ -162,6 +163,7 @@ def play_game():
     print("\033[?25h", end="")  # show cursor
     print("Game Over")
     print(f"Final Score: {game.score}")
+
 
 if __name__ == "__main__":
     play_game()
