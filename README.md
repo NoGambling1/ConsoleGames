@@ -55,18 +55,6 @@ now you can run,
 python main.py
 ```
 
-### Special note for Unix Users
-
-when trying to play certain games, you may encounter a message saying you don't have the correct rights to access a certain py module.
-
-this is to be expected as you should have followed the instructions properly.
-
-instead of running the `python main.py` command, run `sudo python main.py`. 
-
-this command lets you elevate the program to be able to use the modules.
-
-we are working on a way to do something else instead of using sudo for security reaosns.
-
 ## LICENSING
 
 ConsoleGames is licensed under the MIT License. See the  [LICENSE](https://github.com/NoGambling1/ConsoleGames/blob/main/LICENSE) for more information.
