@@ -37,11 +37,21 @@ open a terminal and go to a parent folder that you want to house the files in
 
 then,
 
-bash
-```
+```bash
 git clone https://github.com/NoGambling1/ConsolesGames.git
 cd ConsolesGames
 cd src
+```
+now, make sure you have the req installed.
+
+```python
+
+pip install -r requirements.txt
+
+```
+now you can run,
+
+```bash
 python main.py
 ```
 
