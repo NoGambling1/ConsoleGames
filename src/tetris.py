@@ -1,5 +1,6 @@
 # experimental, will fix later
 # I can tell you worked real hard to code all of this
+# hotfix
 import random
 import time
 import os
@@ -13,15 +14,10 @@ BLOCK = '█'
 GUIDE = '·'
 
 # shapes (I, O, T, S, Z, J, L)
-SHAPES = [
-    [[1, 1, 1, 1]],
-    [[1, 1], [1, 1]],
-    [[0, 1, 0], [1, 1, 1]],
-    [[0, 1, 1], [1, 1, 0]],
-    [[1, 1, 0], [0, 1, 1]],
-    [[1, 0, 0], [1, 1, 1]],
-    [[0, 0, 1], [1, 1, 1]]
-]
+SHAPES = [[[1, 1, 1, 1]], [[1, 1], [1, 1]], [[0, 1, 0], [1, 1, 1]],
+          [[0, 1, 1], [1, 1, 0]], [[1, 1, 0], [0, 1, 1]], [[1, 0, 0],
+                                                           [1, 1, 1]],
+          [[0, 0, 1], [1, 1, 1]]]
 
 # Colors
 COLORS = [
@@ -36,6 +32,7 @@ COLORS = [
 
 RESET_COLOR = '\033[0m'
 GUIDE_COLOR = '\033[90m'  # dark gray
+
 
 class Tetromino:
     """
@@ -67,6 +64,7 @@ class Tetromino:
     def rotate(self):
         """90 CW"""
         self.shape = list(zip(*self.shape[::-1]))
+
 
 class TetrisGame:
     """
@@ -117,8 +115,7 @@ class TetrisGame:
             for x, cell in enumerate(row):
                 if cell:
                     new_x, new_y = piece.x + x + dx, piece.y + y + dy
-                    if (new_x < 0 or new_x >= WIDTH or
-                        new_y >= HEIGHT or
+                    if (new_x < 0 or new_x >= WIDTH or new_y >= HEIGHT or
                         (new_y >= 0 and self.board[new_y][new_x] != EMPTY)):
                         return False
         return True
@@ -128,11 +125,16 @@ class TetrisGame:
         for y, row in enumerate(piece.shape):
             for x, cell in enumerate(row):
                 if cell:
-                    self.board[piece.y + y][piece.x + x] = piece.color + BLOCK + RESET_COLOR
+                    self.board[piece.y +
+                               y][piece.x +
+                                  x] = piece.color + BLOCK + RESET_COLOR
 
     def remove_completed_lines(self):
         """rm completed lines and return the numLines cleared"""
-        lines_to_remove = [i for i, row in enumerate(self.board) if all(cell != EMPTY for cell in row)]
+        lines_to_remove = [
+            i for i, row in enumerate(self.board)
+            if all(cell != EMPTY for cell in row)
+        ]
         for line in lines_to_remove:
             del self.board[line]
             self.board.insert(0, [EMPTY for _ in range(WIDTH)])
@@ -177,11 +179,14 @@ class TetrisGame:
     def draw(self):
         """draw game state"""
         os.system('cls' if os.name == 'nt' else 'clear')
-        
+
         #create temp board with the guidelines
-        temp_board = [[GUIDE_COLOR + GUIDE + RESET_COLOR if x % 3 == 0 or y % 3 == 0 else EMPTY 
-                       for x in range(WIDTH)] for y in range(HEIGHT)]
-        
+        temp_board = [[
+            GUIDE_COLOR + GUIDE +
+            RESET_COLOR if x % 3 == 0 or y % 3 == 0 else EMPTY
+            for x in range(WIDTH)
+        ] for y in range(HEIGHT)]
+
         # add placed pieces to the temp board
         for y, row in enumerate(self.board):
             for x, cell in enumerate(row):
@@ -192,7 +197,9 @@ class TetrisGame:
         for y, row in enumerate(self.current_piece.shape):
             for x, cell in enumerate(row):
                 if cell:
-                    temp_board[self.current_piece.y + y][self.current_piece.x + x] = self.current_piece.color + BLOCK + RESET_COLOR
+                    temp_board[self.current_piece.y + y][
+                        self.current_piece.x +
+                        x] = self.current_piece.color + BLOCK + RESET_COLOR
 
         # centre board like actual tetris
         terminal_width = os.get_terminal_size().columns
@@ -201,7 +208,9 @@ class TetrisGame:
         print("\n" * 2)  # top padding for fullscreen terminal support
         print(" " * left_padding + "┌" + "─" * (WIDTH * 2) + "┐")
         for row in temp_board:
-            print(" " * left_padding + "│" + "".join(cell + (RESET_COLOR + ' ' if cell != EMPTY else ' ') for cell in row) + "│")
+            print(" " * left_padding + "│" +
+                  "".join(cell + (RESET_COLOR + ' ' if cell != EMPTY else ' ')
+                          for cell in row) + "│")
         print(" " * left_padding + "└" + "─" * (WIDTH * 2) + "┘")
 
         # info display
@@ -210,21 +219,22 @@ class TetrisGame:
 
         # following piece display (terrible, need to rework)
         print("\n" + " " * ((terminal_width - 11) // 2) + "Next piece:")
-        next_piece_str = ["".join(self.next_piece.color + (BLOCK if cell else "  ") + RESET_COLOR for cell in row) for row in self.next_piece.shape]
+        next_piece_str = [
+            "".join(self.next_piece.color + (BLOCK if cell else "  ") +
+                    RESET_COLOR for cell in row)
+            for row in self.next_piece.shape
+        ]
         for row in next_piece_str:
             print(" " * ((terminal_width - len(row)) // 2) + row)
 
         # display controls
         controls = [
-            "Controls:",
-            "A/←: Move left",
-            "D/→: Move right",
-            "S/↓: Soft drop",
-            "W/↑: Rotate",
-            "Space: Hard drop",
-            "Q: Quit"
+            "Controls:", "A/←: Move left", "D/→: Move right", "S/↓: Soft drop",
+            "W/↑: Rotate", "Space: Hard drop", "Q: Quit"
         ]
-        print("\n" + "\n".join(" " * ((terminal_width - len(line)) // 2) + line for line in controls))
+        print("\n" + "\n".join(" " * ((terminal_width - len(line)) // 2) + line
+                               for line in controls))
+
 
 def get_input(timeout=0.1):
     """
@@ -260,12 +270,18 @@ def get_input(timeout=0.1):
                 key = sys.stdin.read(1)
                 if key == '\x1b':  # special key prefix
                     key += sys.stdin.read(2)
-                    return {'[A': 'w', '[B': 's', '[D': 'a', '[C': 'd'}[key[1:]]
+                    return {
+                        '[A': 'w',
+                        '[B': 's',
+                        '[D': 'a',
+                        '[C': 'd'
+                    }[key[1:]]
                 return key.lower()
             else:
                 return None
         finally:
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+
 
 def play_game():
     """game loop"""
@@ -274,7 +290,9 @@ def play_game():
     move_delay = 0.5
 
     print("tetris for dummies")
-    print("CONTROLS: \nA/←: Left, \nD/→: Right, \nS/↓: Soft drop, \nW/↑: Rotate, \nSpace: Hard drop, \nQ: Quit")
+    print(
+        "CONTROLS: \nA/←: Left, \nD/→: Right, \nS/↓: Soft drop, \nW/↑: Rotate, \nSpace: Hard drop, \nQ: Quit"
+    )
     input("press 'Enter' to start...")
 
     while not game.game_over:
@@ -302,6 +320,7 @@ def play_game():
     print("game over")
     print(f"final score: {game.score}")
     input("press 'Enter' to return to the main menu...")
+
 
 if __name__ == "__main__":
     play_game()
