@@ -2875,7 +2875,17 @@ files = [
 pyobjc-core = ">=10.3.1"
 pyobjc-framework-Cocoa = ">=10.3.1"
 
+[[package]]
+name = "pyperclip"
+version = "1.9.0"
+description = "A cross-platform clipboard module for Python. (Only handles plain text for now.)"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pyperclip-1.9.0.tar.gz", hash = "sha256:b7de0142ddc81bfc5c7507eea19da920b92252b548b96186caf94a5e2527d310"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "aa5e668d48d276234c9e2aadc7bc796ee9cf34e3f051d142052685e016e6bf38"
+content-hash = "e744e0888c181e4176acea111d538ab630ca0ae757c5063d3ee0111b9fe956b7"
