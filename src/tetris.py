@@ -4,7 +4,6 @@ import random
 import time
 import os
 import sys
-import keyboard
 
 # const things
 WIDTH = 10
@@ -284,14 +283,10 @@ def play_game():
         key = get_input()
         if key in ('a', 'd'):
             game.move_piece(-1 if key == 'a' else 1, 0)
-        elif keyboard.is_pressed('left'): game.move_piece(-1, 0); time.sleep(0.1)
-        elif keyboard.is_pressed('right'): game.move_piece(1, 0); time.sleep(0.1)
-        elif key == 's' or keyboard.is_pressed('down'):
+        elif key == 's':
             game.move_piece(0, 1)
-            time.sleep(0.1)
-        elif key == 'w' or keyboard.is_pressed('up'):
+        elif key == 'w':
             game.rotate_piece()
-            time.sleep(0.1)
         elif key == ' ':
             game.drop_piece()
         elif key == 'q':
