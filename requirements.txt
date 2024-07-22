@@ -1,0 +1,4 @@
+colorama==0.4.6
+keyboard==0.13.5
+python-xlib==0.33
+six==1.16.0
