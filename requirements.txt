@@ -3,3 +3,4 @@ keyboard==0.13.5
 pyperclip==1.9.0
 python-xlib==0.33
 six==1.16.0
+windows-curses==2.3.3
