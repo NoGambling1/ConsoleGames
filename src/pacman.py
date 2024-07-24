@@ -2,7 +2,7 @@ import curses
 import random
 import time
 
-# constants
+# const const constant (bun)
 WALL = '#'
 PELLET = '·'
 POWER_PELLET = '●'
@@ -10,7 +10,7 @@ EMPTY = ' '
 PACMAN = ['c', 'C']
 GHOST = 'G'
 
-# directions
+# dir
 UP = (-1, 0)
 DOWN = (1, 0)
 LEFT = (0, -1)
@@ -30,6 +30,13 @@ class PacmanGame:
             {'pos': (self.height // 2 - 4, self.width // 2), 'dir': UP, 'char': 'G'},
         ]
         self.power_mode = 0
+
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # pacman
+        curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)     # ghost
+        curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_BLACK)    # wall
+        curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_BLACK)   # pellet
+        curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK) # power pellet
         
     def generate_level(self):
         level = []
@@ -52,12 +59,24 @@ class PacmanGame:
         for y, row in enumerate(self.level):
             for x, cell in enumerate(row):
                 if (y, x) == self.pacman_pos:
-                    self.stdscr.addch(y, x, PACMAN[self.pacman_animation_state])
+                    self.stdscr.addch(y, x, PACMAN[self.pacman_animation_state], curses.color_pair(1))
                 elif any(ghost['pos'] == (y, x) for ghost in self.ghosts):
-                    self.stdscr.addch(y, x, GHOST)
+                    self.stdscr.addch(y, x, GHOST, curses.color_pair(2))
+                elif cell == WALL:
+                    self.stdscr.addch(y, x, cell, curses.color_pair(3))
+                elif cell == PELLET:
+                    self.stdscr.addch(y, x, cell, curses.color_pair(4))
+                elif cell == POWER_PELLET:
+                    self.stdscr.addch(y, x, cell, curses.color_pair(5))
                 else:
                     self.stdscr.addch(y, x, cell)
-        self.stdscr.addstr(self.height - 1, 0, f"Score: {self.score} Lives: {self.lives}")
+        
+        score_text = f"Score: {self.score} Lives: {self.lives}"
+        self.stdscr.addstr(self.height - 3, (self.width - len(score_text)) // 2, score_text)
+        
+        directions = "Use arrow keys to move. Press 'q' to quit."
+        self.stdscr.addstr(self.height - 2, (self.width - len(directions)) // 2, directions)
+        
         self.stdscr.refresh()
         
     def move_pacman(self, direction):
@@ -72,7 +91,7 @@ class PacmanGame:
                 self.power_mode = 20
                 self.level[new_y] = self.level[new_y][:new_x] + EMPTY + self.level[new_y][new_x+1:]
         self.pacman_animation_state = 1 - self.pacman_animation_state
-                
+                        
     def move_ghost(self, ghost):
         directions = [UP, DOWN, LEFT, RIGHT]
         new_pos = None
@@ -124,7 +143,7 @@ class PacmanGame:
                 
             time.sleep(0.1)
         
-        self.stdscr.addstr(self.height - 1, 0, "game over! press any key to exit...")
+        self.stdscr.addstr(self.height - 1, (self.width - 20) // 2, "game over! press any key to exit...")
         self.stdscr.refresh()
         self.stdscr.getch()
 
