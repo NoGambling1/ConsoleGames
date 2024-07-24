@@ -15,6 +15,7 @@ we have a variety of planned and already developed games
   - Snake
   - Chess
   - Conway's Game of Life
+  - Pacman
   - More to be added
 
 ## Documentation
