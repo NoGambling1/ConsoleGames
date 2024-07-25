@@ -30,7 +30,7 @@ wanna play them? pretty simple. you can use the repl link to play them via repli
 
 ### For Repl:
 
-go [here](https://replit.com/@orangejuiceplz/ConsolesGames)
+go [here](https://replit.com/@orangejuiceplz/ConsoleGames)
 
 ### For Cloning
 
