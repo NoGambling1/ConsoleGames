@@ -186,7 +186,7 @@ def solitaire_game(stdscr):
                     selected_card = game.waste[-1]
 
         if game.is_game_won():
-            stdscr.addstr(height // 2, (width - 18) // 2, "You won the game!", curses.A_BOLD)
+            stdscr.addstr(height // 2, (width - 18) // 2, "winner winner chicken dinner", curses.A_BOLD)
             stdscr.refresh()
             stdscr.getch()
             break
