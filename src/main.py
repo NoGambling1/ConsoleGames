@@ -1,16 +1,13 @@
 import time
 import os
 import random
-import platform
 from ai.ai_chat import talk_to_ai
 from system_info import display_system_info
-from datetime import datetime
-
+from games import checkers, chess, conways_game_of_life, pacman, snake, solitare, sudoku, tetris, tic_tac_toe
 
 def clear_screen():
     """Clear the console screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
-
 
 def print_animated_title():
     """Print an animated title for Console Games."""
@@ -33,16 +30,14 @@ def print_animated_title():
         print(colored_line)
         time.sleep(0.1)
 
-
 def print_main_menu():
-    """Print the main menu options."""  # update
+    """Print the main menu options."""
     print("\nMAIN MENU:")
     print("1. View Games")
     print("2. View Credits")
     print("3. System Information")
     print("4. Talk to AI")
     print("5. Quit")
-
 
 def print_games_menu(games):
     """Print the games menu with the list of currently available games."""
@@ -51,24 +46,20 @@ def print_games_menu(games):
         print(f"{index}. {game['name']}")
     print(f"{len(games) + 1}. Return to Main Menu")
 
-
 def play_game(game_module):
-    """Import and play the selected game."""
+    """Play the selected game."""
     clear_screen()
     print(f"Starting {game_module['name']}...")
-    game = __import__(game_module['file'])
-    game.play_game()
-    input("press 'Enter' to return to the main menu...")
-
+    game_module['module'].play_game()
+    input("Press 'Enter' to return to the main menu...")
 
 def view_credits():
     """Display the credits."""
     clear_screen()
     print("CREDITS:")
     print("Console Games created w/ love by NoGambling && orangejuiceplz <3")
-    print("thanks for playing! ILY <3")
-    input("\npress 'Enter' to return to the main menu...")
-
+    print("Thanks for playing! ILY <3")
+    input("\nPress 'Enter' to return to the main menu...")
 
 def system_info():
     """Display system information and current date/time."""
@@ -76,48 +67,31 @@ def system_info():
     display_system_info()
     input("\nPress 'Enter' to return to the main menu...")
 
-
 def main():
-    games = [{
-        'name': 'Tic-Tac-Toe',
-        'file': 'tic-tac-toe'
-    }, {
-        'name': 'Checkers',
-        'file': 'checkers'
-    }, {
-        'name': 'Tetris',
-        'file': 'tetris'
-    }, {
-        'name': 'Snake',
-        'file': 'snake'
-    }, {
-        'name': 'Sudoku',
-        'file': 'sudoku'
-    }, {
-        'name': 'Game of Life',
-        'file': 'conways_game_of_life'
-    }, {
-        'name': 'Pacman',
-        'file': 'pacman'
-    }, {
-        'name': 'Solitare',
-        'file': 'solitare'
-    }]
+    games = [
+        {'name': 'Tic-Tac-Toe', 'module': tic_tac_toe},
+        {'name': 'Checkers', 'module': checkers},
+        {'name': 'Chess', 'module': chess},
+        {'name': 'Tetris', 'module': tetris},
+        {'name': 'Snake', 'module': snake},
+        {'name': 'Sudoku', 'module': sudoku},
+        {'name': 'Game of Life', 'module': conways_game_of_life},
+        {'name': 'Pacman', 'module': pacman},
+        {'name': 'Solitaire', 'module': solitare},
+    ]
 
     while True:
         clear_screen()
         print_animated_title()
         print_main_menu()
 
-        choice = input("\nwhich option would you like to select? (1-5): ")
+        choice = input("\nWhich option would you like to select? (1-5): ")
         if choice == '1':
             while True:
                 clear_screen()
                 print_animated_title()
                 print_games_menu(games)
-                game_choice = input(
-                    f"\nwhich game would you like to play? (1-{len(games) + 1}): "
-                )
+                game_choice = input(f"\nWhich game would you like to play? (1-{len(games) + 1}): ")
                 if game_choice.isdigit():
                     game_choice = int(game_choice)
                     if 1 <= game_choice <= len(games):
@@ -125,10 +99,10 @@ def main():
                     elif game_choice == len(games) + 1:
                         break
                     else:
-                        print("not a valid choice. try again?")
+                        print("Not a valid choice. Try again?")
                         time.sleep(1)
                 else:
-                    print("not a valid input. please enter a number.")
+                    print("Not a valid input. Please enter a number.")
                     time.sleep(1)
         elif choice == '2':
             view_credits()
@@ -137,13 +111,12 @@ def main():
         elif choice == '4':
             talk_to_ai()
         elif choice == '5':
-            print("\nthanks for playing! ILY <3 - orangejuiceplz")
+            print("\nThanks for playing! ILY <3 - orangejuiceplz")
             time.sleep(2)
             break
         else:
-            print("not a valid choice. try again?")
+            print("Not a valid choice. Try again?")
             time.sleep(1)
-
 
 if __name__ == "__main__":
     main()
