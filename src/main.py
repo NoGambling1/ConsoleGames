@@ -3,6 +3,7 @@ import os
 import random
 import platform
 from ai.ai_chat import talk_to_ai
+from system_info import display_system_info
 from datetime import datetime
 
 
@@ -72,10 +73,8 @@ def view_credits():
 def system_info():
     """Display system information and current date/time."""
     clear_screen()
-    print("SYSTEM INFORMATION:")
-    print(f"OS: {platform.system()} {platform.release()}")
-    print(f"PY Version: {platform.python_version()}")
-    input("\npress 'Enter' to return to the main menu...")
+    display_system_info()
+    input("\nPress 'Enter' to return to the main menu...")
 
 
 def main():
