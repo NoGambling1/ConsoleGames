@@ -14,7 +14,7 @@ ___
 ## 💙 ** Terminal Games ** 💙
 #### ConsoleGames
 
-![GitHub Repo stars](https://img.shields.io/github/stars/NoGambling1/ConsoleGames?style=for-the-badge&color=cba6f7) ![GitHub last commit](https://img.shields.io/github/last-commit/NoGambling1/ConsoleGames?style=for-the-badge&color=b4befe) ![GitHub repo size](https://img.shields.io/github/repo-size/NoGambling1/ConsoleGames?style=for-the-badge&color=cba6f7) <a href="https://discord.gg/yYdE2S43cY"> <img src="https://img.shields.io/discord/serverID?style=for-the-badge&logo=discord&color=cba6f7&link=https%3A%2F%2Fdiscord.gg%9yYdE2S43cY"> </a>
+![GitHub Repo stars](https://img.shields.io/github/stars/NoGambling1/ConsoleGames?style=for-the-badge&color=cba6f7) ![GitHub last commit](https://img.shields.io/github/last-commit/NoGambling1/ConsoleGames?style=for-the-badge&color=b4befe) ![GitHub repo size](https://img.shields.io/github/repo-size/NoGambling1/ConsoleGames?style=for-the-badge&color=cba6f7) <a href="https://discord.gg/yYdE2S43cY"> <img src="https://img.shields.io/discord/1087366162767167498?style=for-the-badge&logo=discord&color=cba6f7&link=https%3A%2F%2Fdiscord.gg%9yYdE2S43cY"> </a>
 
 <br/>
 </div>
