@@ -16,6 +16,7 @@ we have a variety of planned and already developed games
   - Chess
   - Conway's Game of Life
   - Pacman
+  - Solitare
   - More to be added
 
 ## Documentation
