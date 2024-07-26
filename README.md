@@ -4,8 +4,8 @@ ___
 
 <div align="center">
 <br>
-  <a href="https://github.com/NoGambling1/ConsoleGames/docs"><kbd> <br> Docs <br> </kbd></a>&ensp;&ensp;
-  <a href="https://github.com/NoGambling1/ConsoleGames/docs/FAQ"><kbd> <br> FAQ <br> </kbd></a>&ensp;&ensp;
+  <a href="https://github.com/NoGambling1/ConsoleGames/tree/main/docs"><kbd> <br> Docs <br> </kbd></a>&ensp;&ensp;
+  <a href="https://github.com/NoGambling1/ConsoleGames/tree/main/docs/FAQ"><kbd> <br> FAQ <br> </kbd></a>&ensp;&ensp;
   <a href="https://discord.gg/yYdE2S43cY"><kbd> <br> Discord <br> </kbd></a>
 </div><br>
 
