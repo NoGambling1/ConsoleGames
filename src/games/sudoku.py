@@ -15,8 +15,6 @@ class color:
     UNDERLINE = '\033[4m'
     END = '\033[0m'
 
-# ------------------------------------------------------------------------------
-
 def createBoard(board):
     for a in range(4):
         if a == 2:
@@ -37,9 +35,7 @@ def createBoard(board):
         print("")
     print("---------------------")
 
-# ------------------------------------------------------------------------------
-
-def randomizeBoard(difficulty):  # Diff 1-3,  1=40%, 2=32%, 3=25%
+def randomizeBoard(difficulty):
     if difficulty == 1: given = 40
     elif difficulty == 2: given = 32
     elif difficulty == 3: given = 25
@@ -48,77 +44,89 @@ def randomizeBoard(difficulty):  # Diff 1-3,  1=40%, 2=32%, 3=25%
         randie = random.randrange(100) < given
         if randie:
             attempts = 0
-            
-            max_attempts = 100  # Limit to prevent infinite loops
+            max_attempts = 100
             while attempts < max_attempts:
-                #print(i)
                 board[i] = f" {random.randint(1, 4)} "
                 if checkSpot(i):
-                    break  # Valid spot found, exit the loop
+                    break
                 else:
-                    attempts += 1  # Increment attempt counter
+                    attempts += 1
 
     return board
 
-# ------------------------------------------------------------------------------
-
 def checkSpot(spot):
-    # Extract the number from the current spot
     current_number = board[spot].strip()
-
-    # Check the row for duplicates
     row_start = (spot // 4) * 4
     for i in range(row_start, row_start + 4):
         if i != spot and board[i].strip() == current_number:
             return False
 
-    # Check the column for duplicates
     for i in range(spot % 4, 16, 4):
         if i != spot and board[i].strip() == current_number:
             return False
-        
-    numArr = []
-    Q1 = [0, 1, 4, 5]
-    Q2 = [2, 3, 6, 7]
-    Q3 = [8, 9, 12, 13]
-    Q4 = [10, 11, 14, 15]
-    if(spot in Q1): # Quadrant 1
-        for count in range (4):
-            numArr.append(board[Q1[count]].replace(" ",""))
-            print(numArr)
-        for count in range(4):
-            if (numArr.count(f"{count+1}") > 1):
-                return False
-        
-    elif (spot in Q2): #Quadrant 2
-        for count in range (4):
-            numArr.append(board[Q2[count]].replace(" ",""))
-            print(numArr)
-        for count in range(4):
-            if (numArr.count(f"{count+1}") > 1):
-                return False
-        
-    elif (spot in Q3): #Quadrant 3
-        for count in range (4):
-            numArr.append(board[Q3[count]].replace(" ",""))
-            print(numArr)
-        for count in range(4):
-            if (numArr.count(f"{count+1}") > 1):
-                return False
-        
-    elif (spot in Q4): #Quadrant 4
-        for count in range (4):
-            numArr.append(board[Q4[count]].replace(" ",""))
-            print(numArr)
-        for count in range(4):
-            if (numArr.count(f"{count+1}") > 1):
-                return False
 
-    # If no duplicates are found, return True
+    quadrant = [(0, 1, 4, 5), (2, 3, 6, 7), (8, 9, 12, 13), (10, 11, 14, 15)]
+    for q in quadrant:
+        if spot in q:
+            for pos in q:
+                if pos != spot and board[pos].strip() == current_number:
+                    return False
+
     return True
 
+def solveBoard(unfinished_board):
+    newBoard = ["   "] * 16
+    def solveUtil(spot, attempts_left=10000):
+        if spot == 16:
+            return True
 
-# ------------------------------------------------------------------------------
+        for number in range(1, 5):
+            if isValidMove(spot, number):
+                newBoard[spot] = f" {number} "
+                if solveUtil(spot + 1, attempts_left - 1):
+                    return True
+                newBoard[spot] = "   "
 
-print("hi")
-createBoard(randomizeBoard(1))
+        return False
+
+    return newBoard
+
+def isValidMove(spot, number, unfinished_board):
+    current_number = unfinished_board[spot].strip()
+    if current_number == "":
+        row_start = (spot // 4) * 4
+        for i in range(row_start, row_start + 4):
+            if i != spot and unfinished_board[i].strip() == str(number):
+                return False
+
+        for i in range(spot % 4, 16, 4):
+            if i != spot and unfinished_board[i].strip() == str(number):
+                return False
+
+        quadrant = [(0, 1, 4, 5), (2, 3, 6, 7), (8, 9, 12, 13), (10, 11, 14, 15)]
+        for q in quadrant:
+            if spot in q:
+                for pos in q:
+                    if pos != spot and unfinished_board[pos].strip() == str(number):
+                        return False
+
+        return True
+    return False
+
+if __name__ == "__main__":
+    print("Attempting to solve the board...")
+    initial_board = [item for item in board]  # Capture the initial board state
+    while True:
+        createBoard(board)
+        print(board)
+        solved_board = solveBoard(board.copy())  # Pass a copy of the unfinished board
+        if solved_board != initial_board:  # Check if the board was actually solved
+            print("Initial unsolved board:")
+            createBoard(initial_board)
+            print("Solved board:")
+            createBoard(solved_board)
+            break
+        else:
+            print("\nNo solution found. Generating a new board...")
+            board = ["   "] * 16
+            randomizeBoard(1)
