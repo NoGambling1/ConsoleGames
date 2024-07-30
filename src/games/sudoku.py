@@ -1,132 +1,139 @@
 import random
+import os
 
-# Global board declaration
-board = ["   "] * 16
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-class color:
-    PURPLE = '\033[95m'
-    CYAN = '\033[96m'
-    DARKCYAN = '\033[36m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
-
-def createBoard(board):
-    for a in range(4):
-        if a == 2:
-            print(color.BOLD + color.CYAN + "---------------------" + color.END)
-        else:
-            print("---------------------")
-        for i in range(4):
-            thingy = (a * 4) + i
-            if i == 1:
-                print(board[thingy], end=color.BOLD + color.CYAN + " |" + color.END)
-            elif thingy > 15:
-                print(" |")
-            elif i == 0:
-                print("|" + board[thingy], end=" |")
+def create_board(board):
+    output = "\n"
+    output += "    A B C   D E F   G H I\n"
+    output += "  +-------+-------+-------+\n"
+    for i in range(9):
+        output += f"{i+1} |"
+        for j in range(9):
+            if board[i][j] == 0:
+                output += " ."
             else:
-                print(board[thingy], end=" |")
+                output += f" {board[i][j]}"
+            if (j + 1) % 3 == 0:
+                output += " |"
+        output += "\n"
+        if (i + 1) % 3 == 0:
+            output += "  +-------+-------+-------+\n"
+    return output
 
-        print("")
-    print("---------------------")
-
-def randomizeBoard(difficulty):
-    if difficulty == 1: given = 40
-    elif difficulty == 2: given = 32
-    elif difficulty == 3: given = 25
-
-    for i in range(16):
-        randie = random.randrange(100) < given
-        if randie:
-            attempts = 0
-            max_attempts = 100
-            while attempts < max_attempts:
-                board[i] = f" {random.randint(1, 4)} "
-                if checkSpot(i):
-                    break
-                else:
-                    attempts += 1
-
-    return board
-
-def checkSpot(spot):
-    current_number = board[spot].strip()
-    row_start = (spot // 4) * 4
-    for i in range(row_start, row_start + 4):
-        if i != spot and board[i].strip() == current_number:
+def is_valid(board, num, pos):
+    for i in range(9):
+        if board[pos[0]][i] == num and pos[1] != i:
             return False
-
-    for i in range(spot % 4, 16, 4):
-        if i != spot and board[i].strip() == current_number:
+    for i in range(9):
+        if board[i][pos[1]] == num and pos[0] != i:
             return False
-
-    quadrant = [(0, 1, 4, 5), (2, 3, 6, 7), (8, 9, 12, 13), (10, 11, 14, 15)]
-    for q in quadrant:
-        if spot in q:
-            for pos in q:
-                if pos != spot and board[pos].strip() == current_number:
-                    return False
-
+    box_x, box_y = pos[1] // 3, pos[0] // 3
+    for i in range(box_y * 3, box_y * 3 + 3):
+        for j in range(box_x * 3, box_x * 3 + 3):
+            if board[i][j] == num and (i, j) != pos:
+                return False
     return True
 
-def solveBoard(unfinished_board):
-    newBoard = ["   "] * 16
-    def solveUtil(spot, attempts_left=10000):
-        if spot == 16:
-            return True
-
-        for number in range(1, 5):
-            if isValidMove(spot, number):
-                newBoard[spot] = f" {number} "
-                if solveUtil(spot + 1, attempts_left - 1):
-                    return True
-                newBoard[spot] = "   "
-
-        return False
-
-    return newBoard
-
-def isValidMove(spot, number, unfinished_board):
-    current_number = unfinished_board[spot].strip()
-    if current_number == "":
-        row_start = (spot // 4) * 4
-        for i in range(row_start, row_start + 4):
-            if i != spot and unfinished_board[i].strip() == str(number):
-                return False
-
-        for i in range(spot % 4, 16, 4):
-            if i != spot and unfinished_board[i].strip() == str(number):
-                return False
-
-        quadrant = [(0, 1, 4, 5), (2, 3, 6, 7), (8, 9, 12, 13), (10, 11, 14, 15)]
-        for q in quadrant:
-            if spot in q:
-                for pos in q:
-                    if pos != spot and unfinished_board[pos].strip() == str(number):
-                        return False
-
+def solve(board):
+    find = find_empty(board)
+    if not find:
         return True
+    row, col = find
+    for i in range(1, 10):
+        if is_valid(board, i, (row, col)):
+            board[row][col] = i
+            if solve(board):
+                return True
+            board[row][col] = 0
     return False
 
-if __name__ == "__main__":
-    print("Attempting to solve the board...")
-    initial_board = [item for item in board]  # Capture the initial board state
+def find_empty(board):
+    for i in range(9):
+        for j in range(9):
+            if board[i][j] == 0:
+                return (i, j)
+    return None
+
+def generate_sudoku(difficulty):
+    board = [[0 for _ in range(9)] for _ in range(9)]
+    solve(board)
+    remove = {1: random.randint(40, 50),
+              2: random.randint(51, 60),
+              3: random.randint(61, 70)}[difficulty]
+    while remove > 0:
+        row, col = random.randint(0, 8), random.randint(0, 8)
+        if board[row][col] != 0:
+            board[row][col] = 0
+            remove -= 1
+    return board
+
+def play_game():
     while True:
-        createBoard(board)
-        print(board)
-        solved_board = solveBoard(board.copy())  # Pass a copy of the unfinished board
-        if solved_board != initial_board:  # Check if the board was actually solved
-            print("Initial unsolved board:")
-            createBoard(initial_board)
-            print("Solved board:")
-            createBoard(solved_board)
+        try:
+            difficulty = int(input("Choose difficulty (1-Easy, 2-Medium, 3-Hard): "))
+            if difficulty not in [1, 2, 3]:
+                raise ValueError
             break
+        except ValueError:
+            print("Invalid input. Please enter 1, 2, or 3.")
+
+    board = generate_sudoku(difficulty)
+    original_board = [row[:] for row in board]
+
+    while True:
+        clear_screen()
+        print(create_board(board))
+        print("\nInstructions:")
+        print("Enter your move as 'row column number' (e.g., '1A 5' or '3C 7')")
+        print("Enter 'q' to quit, 's' to solve, or 'r' to reset")
+
+        move = input("\nEnter your move: ").lower()
+
+        if move == 'q':
+            break
+        elif move == 's':
+            solution = [row[:] for row in board]
+            if solve(solution):
+                clear_screen()
+                print("Solved board:")
+                print(create_board(solution))
+                input("Press Enter to continue...")
+            else:
+                print("No solution exists!")
+                input("Press Enter to continue...")
+        elif move == 'r':
+            board = [row[:] for row in original_board]
         else:
-            print("\nNo solution found. Generating a new board...")
-            board = ["   "] * 16
-            randomizeBoard(1)
+            try:
+                pos, num = move.split()
+                row = int(pos[0]) - 1
+                col = ord(pos[1].upper()) - ord('A')
+                num = int(num)
+
+                if 0 <= row < 9 and 0 <= col < 9 and 1 <= num <= 9:
+                    if original_board[row][col] == 0:
+                        if is_valid(board, num, (row, col)):
+                            board[row][col] = num
+                        else:
+                            print("Invalid move!")
+                            input("Press Enter to continue...")
+                    else:
+                        print("Can't modify original numbers!")
+                        input("Press Enter to continue...")
+                else:
+                    print("Invalid input! Row should be 1-9, column A-I, and number 1-9.")
+                    input("Press Enter to continue...")
+            except (ValueError, IndexError):
+                print("Invalid input! Format should be 'row column number' (e.g., '1A 5' or '3C 7').")
+                input("Press Enter to continue...")
+
+        if find_empty(board) is None:
+            clear_screen()
+            print(create_board(board))
+            print("Congratulations! You've solved the puzzle!")
+            break
+
+if __name__ == "__main__":
+    play_game()
