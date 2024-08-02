@@ -41,7 +41,7 @@ we have a variety of planned and already developed games
 
 ### Docs info
 
-documentation is still in progress. all of the docs that are currently added ar located in the `docs/` directory
+documentation is still in progress. all of the docs that are currently added are located in the `docs/` directory
 
 ## Getting started
 
@@ -60,7 +60,6 @@ then,
 ```bash
 git clone https://github.com/NoGambling1/ConsolesGames.git
 cd ConsolesGames
-cd src
 ```
 now, make sure you have the req installed.
 
@@ -72,6 +71,7 @@ pip install -r requirements.txt
 now you can run,
 
 ```bash
+cd src
 python main.py
 ```
 
