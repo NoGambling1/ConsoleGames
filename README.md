@@ -74,6 +74,17 @@ now you can run,
 cd src
 python main.py
 ```
+### For the lazy people
+
+i've created a couple scripts depending on your os.
+
+navigate to the `auto/` directory and then navigate to your os directory
+
+for example, if you're on windows, you would go to `auto/nt/` directory and download the install.ps1
+
+then, you can simply just run the script. it'll do the work for you lazy people.
+
+lamdashi out ✌️
 
 ## LICENSING
 
