@@ -180,7 +180,7 @@ def format_complex(z):
     return f"{z:.4f}"
 
 @typing.no_type_check
-def calculate():
+def run_calculator():
     print("simple py calculator written by @orangejuiceplz")
     print("supported operations: +, -, *, /, ^, sqrt, log, ln, sin, cos, tan, fact (factorial), abs (absolute value), exp (exponential), rec (reciprocal)")
     print("commands:")
@@ -251,4 +251,4 @@ def calculate():
             print(f"an unexpected error occurred: {str(e)}. please report this to the repository")
 
 if __name__ == "__main__":
-    calculate()
+    run_calculator()
