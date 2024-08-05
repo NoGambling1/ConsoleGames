@@ -1,5 +1,5 @@
-git clone https://github.com/NoGambling1/ConsolesGames.git 
-cd ConsolesGames
+git clone https://github.com/NoGambling1/ConsoleGames.git 
+cd ConsoleGames
 pip install -r requirements.txt
 cd src
 python main.py
