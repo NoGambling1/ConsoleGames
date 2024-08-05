@@ -58,7 +58,7 @@ open a terminal and go to a parent folder that you want to house the files in
 then,
 
 ```bash
-git clone https://github.com/NoGambling1/ConsolesGames.git
+git clone https://github.com/NoGambling1/ConsoleGames.git
 cd ConsoleGames
 ```
 now, make sure you have the req installed.
