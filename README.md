@@ -59,7 +59,7 @@ then,
 
 ```bash
 git clone https://github.com/NoGambling1/ConsolesGames.git
-cd ConsolesGames
+cd ConsoleGames
 ```
 now, make sure you have the req installed.
 
