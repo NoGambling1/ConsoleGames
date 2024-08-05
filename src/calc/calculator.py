@@ -1,6 +1,8 @@
 import math
 import cmath
 import re
+import typing
+
 
 class Calculator:
     def __init__(self):
@@ -177,6 +179,7 @@ def format_complex(z):
         return f"{z.real:.4f} {'+' if z.imag >= 0 else '-'} {abs(z.imag):.4f}i"
     return f"{z:.4f}"
 
+@typing.no_type_check
 def calculate():
     print("simple py calculator written by @orangejuiceplz")
     print("supported operations: +, -, *, /, ^, sqrt, log, ln, sin, cos, tan, fact (factorial), abs (absolute value), exp (exponential), rec (reciprocal)")
