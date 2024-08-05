@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "consolesgames"
+name = "consolegames"
 version = "0.1.0"
 description = ""
 authors = ["NoGambling && orangejuiceplz"]
