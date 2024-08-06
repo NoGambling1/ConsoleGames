@@ -1,0 +1,129 @@
+name: Python Console Games CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write  # needed for creating releases
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12.4']
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Load cached Poetry installation
+      uses: actions/cache@v3
+      with:
+        path: ~/.local
+        key: poetry-${{ runner.os }}-${{ matrix.python-version }}
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: latest
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    
+    - name: Load cached dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+    
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+    
+    - name: Lint with flake8
+      run: |
+        poetry run flake8 ./src --count --select=E9,F63,F7,F82 --show-source --statistics
+        poetry run flake8 ./src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Type check with mypy
+      run: poetry run mypy src
+    
+    - name: Test with pytest
+      run: poetry run pytest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12.4
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12.4'
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: latest
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+    
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+    
+    - name: Bump version
+      run: |
+        poetry version patch
+        NEW_VERSION=$(poetry version -s)
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+    
+    - name: Update CHANGELOG.md
+      run: |
+        echo "## [${{ env.NEW_VERSION }}] - $(date +'%Y-%m-%d')" >> CHANGELOG.md
+        echo "* Automated release" >> CHANGELOG.md
+        echo "" >> CHANGELOG.md
+        cat CHANGELOG.md >> CHANGELOG.tmp
+        mv CHANGELOG.tmp CHANGELOG.md
+    
+    - name: Commit version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pyproject.toml CHANGELOG.md
+        git commit -m "Bump version to ${{ env.NEW_VERSION }}"
+        git push
+    
+    - name: Build package
+      run: poetry build
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.NEW_VERSION }}
+        release_name: Release ${{ env.NEW_VERSION }}
+        body_path: CHANGELOG.md
+        draft: false
+        prerelease: false
+    
+    - name: Deploy to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: dist/

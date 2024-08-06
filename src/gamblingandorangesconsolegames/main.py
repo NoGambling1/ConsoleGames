@@ -1,8 +1,8 @@
 import time
 import os
 import random
-from ai.ai_chat import talk_to_ai
 from system_info import display_system_info
+from ai.ai_chat import talk_to_ai
 from games import checkers, chess, conways_game_of_life, pacman, snake, solitare, sudoku, tetris, tic_tac_toe
 from calc.calculator import calculate
 
@@ -37,7 +37,7 @@ def print_main_menu():
     print("1. View Games")
     print("2. View Credits")
     print("3. System Information")
-    print("4. Talk to AI")
+    print("4. AI chat")
     print("5. Calculator")
     print("6. Quit")
 
