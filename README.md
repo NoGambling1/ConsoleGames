@@ -53,7 +53,7 @@ go [here](https://replit.com/@orangejuiceplz/ConsoleGames)
 
 ### For Cloning
 
-open a terminal and go to a parent folder that you want to house the files in
+open a terminal and go to a directory that you want to house the files in
 
 then,
 
