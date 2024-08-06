@@ -2,3 +2,5 @@ colorama==0.4.6
 keyboard==0.13.5
 psutil==6.0.0
 pyperclip==1.9.0
+flake8==6.0.0
+importlib-metadata==6.0.0
