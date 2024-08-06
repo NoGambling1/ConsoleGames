@@ -5,8 +5,8 @@ description = "a collection of terminal games written in python"
 authors = ["NoGambling", "orangejuiceplz <orangejuiceplzdev@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/orangejuiceplz/ConsoleGames"
-repository = "https://github.com/orangejuiceplz/ConsoleGames"
+homepage = "https://github.com/NoGambling1/ConsoleGames"
+repository = "https://github.com/NoGambling1/ConsoleGames"
 keywords = ["games", "console", "python", "cli"]
 classifiers = [
  "Development Status :: 3 - Alpha",
