@@ -1,4 +1,4 @@
-from src.calc.calculator import Calculator
+from src.consolegames.calc.calculator import Calculator
 
 def test_add():
     calc = Calculator()
