@@ -1,6 +1,11 @@
 [tool.poetry]
+<<<<<<< HEAD
 name = "consolegames"
 version = "0.1.1"
+=======
+name = "GamblingAndOrangesConsoleGames"
+version = "0.1.0"
+>>>>>>> b459ca5 (screw you whoever took our name)
 description = "a collection of terminal games written in python"
 authors = ["NoGambling", "orangejuiceplz <orangejuiceplzdev@gmail.com>"]
 license = "MIT"
