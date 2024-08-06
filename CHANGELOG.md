@@ -10,3 +10,6 @@
 ## [0.1.4] - 2024-08-06
 * Automated release
 
+## [0.1.5] - 2024-08-06
+* Automated release
+
