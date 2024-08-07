@@ -40,3 +40,6 @@
 ## [0.1.14] - 2024-08-07
 * Automated release
 
+## [0.1.15] - 2024-08-07
+* Automated release
+
