@@ -71,8 +71,8 @@ pip install -r requirements.txt
 now you can run,
 
 ```bash
-cd gamblingandorangesconsolegames
 cd src
+cd gamblingandorangesconsolegames
 python main.py
 ```
 ### For the lazy people
