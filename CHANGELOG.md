@@ -52,3 +52,6 @@
 ## [0.1.18] - 2024-08-11
 * Automated release
 
+## [0.1.19] - 2024-08-14
+* Automated release
+
