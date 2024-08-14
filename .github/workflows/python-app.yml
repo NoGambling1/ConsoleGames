@@ -86,7 +86,23 @@ jobs:
         poetry version patch
         NEW_VERSION=$(poetry version -s)
         echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-        
+    
+    - name: Update CHANGELOG.md
+      run: |
+        echo "## [${{ env.NEW_VERSION }}] - $(date +'%Y-%m-%d')" >> CHANGELOG.md
+        echo "* Automated release" >> CHANGELOG.md
+        echo "" >> CHANGELOG.md
+        cat CHANGELOG.md >> CHANGELOG.tmp
+        mv CHANGELOG.tmp CHANGELOG.md
+    
+    - name: Commit version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pyproject.toml CHANGELOG.md
+        git commit -m "Bump version to ${{ env.NEW_VERSION }}"
+        git push
+    
     - name: Build package
       run: poetry build
     
