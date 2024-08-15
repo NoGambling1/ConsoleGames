@@ -117,47 +117,56 @@ def main():
         },
     ]
 
-    while True:
-        clear_screen()
-        print_animated_title()
-        print_main_menu()
+    try:
+        while True:
+            clear_screen()
+            print_animated_title()
+            print_main_menu()
 
-        choice = input("\nWhich option would you like to select? (1-6): ")
-        if choice == '1':
-            while True:
-                clear_screen()
-                print_animated_title()
-                print_games_menu(games)
-                game_choice = input(
-                    f"\nWhich game would you like to play? (1-{len(games) + 1}): "
-                )
-                if game_choice.isdigit():
-                    game_choice = int(game_choice)
-                    if 1 <= game_choice <= len(games):
-                        play_game(games[game_choice - 1])
-                    elif game_choice == len(games) + 1:
-                        break
-                    else:
-                        print("Not a valid choice. Try again?")
+            choice = input("\nWhich option would you like to select? (1-6): ")
+            if choice == '1':
+                while True:
+                    try:
+                        clear_screen()
+                        print_animated_title()
+                        print_games_menu(games)
+                        game_choice = input(
+                            f"\nWhich game would you like to play? (1-{len(games) + 1}): "
+                        )
+                        if game_choice.isdigit():
+                            game_choice = int(game_choice)
+                            if 1 <= game_choice <= len(games):
+                                play_game(games[game_choice - 1])
+                            elif game_choice == len(games) + 1:
+                                break
+                            else:
+                                print("Not a valid choice. Try again?")
+                                time.sleep(1)
+                        else:
+                            print("Not a valid input. Please enter a number.")
+                            time.sleep(1)
+                    except KeyboardInterrupt:
+                        print("\nReturning to main menu...")
                         time.sleep(1)
-                else:
-                    print("Not a valid input. Please enter a number.")
-                    time.sleep(1)
-        elif choice == '2':
-            view_credits()
-        elif choice == '3':
-            system_info()
-        elif choice == '4':
-            talk_to_ai()
-        elif choice == '5':
-            calculate()
-        elif choice == '6':
-            print("\nThanks for playing! ILY <3 - orangejuiceplz")
-            time.sleep(2)
-            break
-        else:
-            print("Not a valid choice. Try again?")
-            time.sleep(1)
+                        break
+            elif choice == '2':
+                view_credits()
+            elif choice == '3':
+                system_info()
+            elif choice == '4':
+                talk_to_ai()
+            elif choice == '5':
+                calculate()
+            elif choice == '6':
+                print("\nThanks for playing! ILY <3 - orangejuiceplz")
+                time.sleep(2)
+                break
+            else:
+                print("Not a valid choice. Try again?")
+                time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nForce quitting application. Thanks for playing! ILYSMM <3333 - destinee")
+        time.sleep(2)
 
 
 if __name__ == "__main__":
