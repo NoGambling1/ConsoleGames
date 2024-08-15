@@ -65,7 +65,7 @@ def view_credits():
     """Display the credits."""
     clear_screen()
     print("CREDITS:")
-    print("Console Games created w/ love by NoGambling && orangejuiceplz <3")
+    print("Console Games created w/ love by NoGambling && orangejuiceplz <3 AND DESTINEE SHIINA <333333")
     print("Thanks for playing! ILY <3")
     input("\nPress 'Enter' to return to the main menu...")
 
