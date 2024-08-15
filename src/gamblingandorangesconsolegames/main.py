@@ -42,7 +42,9 @@ def print_main_menu():
     print("3. System Information")
     print("4. Talk to AI")
     print("5. Calculator")
-    print("6. Quit")
+    print("6. Pymatrix")
+    print("7. Asciiquarium")
+    print("8. Quit")
 
 
 def print_games_menu(games):
@@ -158,6 +160,10 @@ def main():
             elif choice == '5':
                 calculate()
             elif choice == '6':
+                pymatrix()
+            elif choice == '7':
+                asciifunc()
+            elif choice == '8':
                 print("\nThanks for playing! ILY <3 - orangejuiceplz")
                 time.sleep(2)
                 break
