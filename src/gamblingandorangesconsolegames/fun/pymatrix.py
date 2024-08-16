@@ -74,8 +74,9 @@ def resize_screen(stdscr):
         finish()  # exit smoothly if there's a curses error during resizing the windows!
 # ---------
 
-def main(stdscr):
-    global LINES, COLS, matrix, length, spaces, updates
+def main(args=None):
+    if args is None:
+        args = sys.argv[1:]
 
     try:
         locale.setlocale(locale.LC_ALL, '')
@@ -93,7 +94,12 @@ def main(stdscr):
     parser.add_argument('-r', action='store_true', help='rainbow mode')
     parser.add_argument('-m', action='store_true', help='lambda mode')
     parser.add_argument('-k', action='store_true', help='characters change while scrolling')
-    args = parser.parse_args()
+    args = parser.parse_args(args)
+
+    curses.wrapper(run_matrix, args)
+
+def run_matrix(stdscr, args):
+    global LINES, COLS, matrix, length, spaces, updates
 
     try:
         curses.curs_set(0)
@@ -217,7 +223,7 @@ def main(stdscr):
 
 if __name__ == "__main__":
     try:
-        curses.wrapper(main)
+        main()
     except KeyboardInterrupt:
         pass
     except Exception as e:
