@@ -5,6 +5,8 @@ from gamblingandorangesconsolegames.ai.ai_chat import talk_to_ai
 from gamblingandorangesconsolegames.system_info import display_system_info
 from gamblingandorangesconsolegames.games import checkers, chess, conways_game_of_life, pacman, snake, solitare, sudoku, tetris, tic_tac_toe
 from gamblingandorangesconsolegames.calc.calculator import calculate
+from gamblingandorangesconsolegames.fun.pymatrix import main as pymatrix
+from gamblingandorangesconsolegames.fun.asciiquarium import main as asciiquarium
 
 
 def clear_screen():
@@ -162,7 +164,7 @@ def main():
             elif choice == '6':
                 pymatrix()
             elif choice == '7':
-                asciifunc()
+                asciiquarium()
             elif choice == '8':
                 print("\nThanks for playing! ILY <3 - orangejuiceplz")
                 time.sleep(2)
