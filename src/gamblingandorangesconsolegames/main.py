@@ -139,6 +139,7 @@ def main():
                 # custom_args = input("Enter any custom arguments for asciiquarium (or press Enter to skip): ")
                 # launch_game_or_feature(asciiquarium, custom_args)
                 # please look at my comment at the top!!!
+                print("its because of your comments dest")
             elif choice == '8':
                 print("\nThanks for playing! ILY <3 - orangejuiceplz")
                 time.sleep(2)
