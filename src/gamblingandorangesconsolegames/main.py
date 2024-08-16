@@ -7,12 +7,11 @@ from gamblingandorangesconsolegames.games import checkers, chess, conways_game_o
 from gamblingandorangesconsolegames.calc.calculator import calculate
 from gamblingandorangesconsolegames.fun.pymatrix import main as pymatrix
 from gamblingandorangesconsolegames.fun.asciiquarium import main as asciiquarium
-
+from gamblingandorangesconsolegames.game_buffer import launch_game_or_feature
 
 def clear_screen():
     """Clear the console screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
-
 
 def print_animated_title():
     """Print an animated title for Console Games."""
@@ -35,7 +34,6 @@ def print_animated_title():
         print(colored_line)
         time.sleep(0.1)
 
-
 def print_main_menu():
     """Print the main menu options."""
     print("\nMAIN MENU:")
@@ -48,7 +46,6 @@ def print_main_menu():
     print("7. Asciiquarium")
     print("8. Quit")
 
-
 def print_games_menu(games):
     """Print the games menu with the list of currently available games."""
     print("\nAVAILABLE GAMES:")
@@ -56,14 +53,17 @@ def print_games_menu(games):
         print(f"{index}. {game['name']}")
     print(f"{len(games) + 1}. Return to Main Menu")
 
-
 def play_game(game_module):
-    """Play the selected game."""
+    """Play the selected game using the buffer."""
     clear_screen()
     print(f"Starting {game_module['name']}...")
-    game_module['module'].play_game()
-    input("Press 'Enter' to return to the main menu...")
 
+    custom_args = input("Enter any custom arguments (or press Enter to skip): ")
+
+    # Use the buffer to launch the game
+    launch_game_or_feature(game_module['module'].play_game, custom_args)
+
+    input("Press 'Enter' to return to the main menu...")
 
 def view_credits():
     """Display the credits."""
@@ -73,52 +73,23 @@ def view_credits():
     print("Thanks for playing! ILY <3")
     input("\nPress 'Enter' to return to the main menu...")
 
-
 def system_info():
     """Display system information and current date/time."""
     clear_screen()
     display_system_info()
     input("\nPress 'Enter' to return to the main menu...")
 
-
 def main():
     games = [
-        {
-            'name': 'Tic-Tac-Toe',
-            'module': tic_tac_toe
-        },
-        {
-            'name': 'Checkers',
-            'module': checkers
-        },
-        {
-            'name': 'Chess',
-            'module': chess
-        },
-        {
-            'name': 'Tetris',
-            'module': tetris
-        },
-        {
-            'name': 'Snake',
-            'module': snake
-        },
-        {
-            'name': 'Sudoku',
-            'module': sudoku
-        },
-        {
-            'name': 'Game of Life',
-            'module': conways_game_of_life
-        },
-        {
-            'name': 'Pacman',
-            'module': pacman
-        },
-        {
-            'name': 'Solitaire',
-            'module': solitare
-        },
+        {'name': 'Tic-Tac-Toe', 'module': tic_tac_toe},
+        {'name': 'Checkers', 'module': checkers},
+        {'name': 'Chess', 'module': chess},
+        {'name': 'Tetris', 'module': tetris},
+        {'name': 'Snake', 'module': snake},
+        {'name': 'Sudoku', 'module': sudoku},
+        {'name': 'Game of Life', 'module': conways_game_of_life},
+        {'name': 'Pacman', 'module': pacman},
+        {'name': 'Solitaire', 'module': solitare},
     ]
 
     try:
@@ -127,16 +98,14 @@ def main():
             print_animated_title()
             print_main_menu()
 
-            choice = input("\nWhich option would you like to select? (1-6): ")
+            choice = input("\nWhich option would you like to select? (1-8): ")
             if choice == '1':
                 while True:
                     try:
                         clear_screen()
                         print_animated_title()
                         print_games_menu(games)
-                        game_choice = input(
-                            f"\nWhich game would you like to play? (1-{len(games) + 1}): "
-                        )
+                        game_choice = input(f"\nWhich game would you like to play? (1-{len(games) + 1}): ")
                         if game_choice.isdigit():
                             game_choice = int(game_choice)
                             if 1 <= game_choice <= len(games):
@@ -158,13 +127,17 @@ def main():
             elif choice == '3':
                 system_info()
             elif choice == '4':
-                talk_to_ai()
+                custom_args = input("Enter any custom arguments for AI chat (or press Enter to skip): ")
+                launch_game_or_feature(talk_to_ai, custom_args)
             elif choice == '5':
-                calculate()
+                custom_args = input("Enter any custom arguments for calculator (or press Enter to skip): ")
+                launch_game_or_feature(calculate, custom_args)
             elif choice == '6':
-                pymatrix()
+                custom_args = input("Enter pymatrix arguments (e.g. '-r -b -u 2') or press Enter to skip: ")
+                launch_game_or_feature(pymatrix, custom_args)
             elif choice == '7':
-                asciiquarium()
+                custom_args = input("Enter any custom arguments for asciiquarium (or press Enter to skip): ")
+                launch_game_or_feature(asciiquarium, custom_args)
             elif choice == '8':
                 print("\nThanks for playing! ILY <3 - orangejuiceplz")
                 time.sleep(2)
@@ -175,7 +148,6 @@ def main():
     except KeyboardInterrupt:
         print("\nForce quitting application. Thanks for playing! ILYSMM <3333 - destinee")
         time.sleep(2)
-
 
 if __name__ == "__main__":
     main()
