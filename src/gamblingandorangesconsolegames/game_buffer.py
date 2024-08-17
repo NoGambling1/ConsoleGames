@@ -20,4 +20,4 @@ def launch_game_or_feature(game_function, custom_args=None):
     except Exception as e:
         print(f"An error occurred while running the game or feature: {e}")
     finally:
-        print("Returning to main menu..."
+        print("Returning to main menu...")  # HAHA IDIOT YOU MISSED A PARENTHESIS
