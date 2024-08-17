@@ -136,7 +136,7 @@ def main():
                 custom_args = input("Enter pymatrix arguments (e.g. '-r -b -u 2') or press Enter to skip: ")
                 launch_game_or_feature(pymatrix, custom_args)
             elif choice == '7':
-                custom_args = input("Enter any custom arguments for asciiquarium (or press Enter to skip): ")
+                custom_args = input("Enter any custom arguments for asciiquarium (or press Enter to skip): ") # orangejuiceplz keeps stealing my code while we work together on voice chat. smh
                 launch_game_or_feature(asciiquarium, custom_args)
             elif choice == '8':
                 print("\nThanks for playing! ILY <3 - orangejuiceplz")
