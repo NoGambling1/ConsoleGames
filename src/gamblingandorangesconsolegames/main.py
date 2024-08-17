@@ -6,7 +6,7 @@ from gamblingandorangesconsolegames.system_info import display_system_info
 from gamblingandorangesconsolegames.games import checkers, chess, conways_game_of_life, pacman, snake, solitare, sudoku, tetris, tic_tac_toe
 from gamblingandorangesconsolegames.calc.calculator import calculate
 from gamblingandorangesconsolegames.fun.pymatrix import main as pymatrix
-# from gamblingandorangesconsolegames.fun.asciiquarium import main as asciiquarium -- this seems a little buggy right now so i'm commenting this out
+from gamblingandorangesconsolegames.fun.asciiquarium import main as asciiquarium
 from gamblingandorangesconsolegames.game_buffer import launch_game_or_feature
 
 def clear_screen():
@@ -136,10 +136,8 @@ def main():
                 custom_args = input("Enter pymatrix arguments (e.g. '-r -b -u 2') or press Enter to skip: ")
                 launch_game_or_feature(pymatrix, custom_args)
             elif choice == '7':
-                # custom_args = input("Enter any custom arguments for asciiquarium (or press Enter to skip): ")
-                # launch_game_or_feature(asciiquarium, custom_args)
-                # please look at my comment at the top!!!
-                print("its because of your comments dest")
+                custom_args = input("Enter any custom arguments for asciiquarium (or press Enter to skip): ")
+                launch_game_or_feature(asciiquarium, custom_args)
             elif choice == '8':
                 print("\nThanks for playing! ILY <3 - orangejuiceplz")
                 time.sleep(2)
