@@ -96,7 +96,7 @@ ConsoleGames is licensed under the MIT License. See the  [LICENSE](https://githu
 
 any contributions are welcome, just refer to the [contributor's file](https://github.com/NoGambling1/ConsoleGames/blob/main/docs/CONTRIBUTING.md)
 
-}## side notes by lamdashi
+## side notes by lamdashi
 
 this project is on pypi. so you can js import and use in your own project if you want
 i just like the little green dot and the fact that i went thru hell for that.
