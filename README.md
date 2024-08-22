@@ -38,6 +38,15 @@ we have a variety of planned and already developed games
   - Solitare
   - More to be added
 
+### other stuff
+
+theres also some other fun things packaged in here
+theres a:
+- python version of cmatrix written by @shiinadestinee
+- asciiquraium thats buggy asf
+- sys info viewer
+- calc
+
 ## Documentation
 
 ### Docs info
