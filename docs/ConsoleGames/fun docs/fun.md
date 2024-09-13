@@ -1,0 +1,1 @@
+docs here contain all information about each module in the fun category
