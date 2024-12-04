@@ -5,6 +5,7 @@ import os
 
 def get_system_info():
     info = {
+        "status: updating",
         "OS": f"{platform.system()} {platform.release()}",
         "PY version": platform.python_version(),
         "processor": platform.processor(),
