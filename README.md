@@ -111,3 +111,5 @@ this project is on pypi. so you can js import and use in your own project if you
 i just like the little green dot and the fact that i went thru hell for that.
 
 tests are available under the `tests/` directory. more to be added
+
+honestly i dont even know why i decided to add testing
